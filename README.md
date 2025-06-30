@@ -8,6 +8,10 @@ The system is built on a **hybrid agentic architecture** combining:
 - **Deliberative agents** for strategic planning and risk assessment
 - **Tool-calling capabilities** for external API integrations
 
+# Basic Workflow
+![image](https://github.com/user-attachments/assets/6a79ec77-6ec8-4ce0-aa6a-11c08c2f3ea2)
+
+
 ## 🤖 Agent Architecture Options
 
 ### Option A: **Single Autonomous Payment Agent** (Recommended)
