@@ -8,8 +8,63 @@ The system is built on a **hybrid agentic architecture** combining:
 - **Deliberative agents** for strategic planning and risk assessment
 - **Tool-calling capabilities** for external API integrations
 
-# Basic Workflow
-![image](https://github.com/user-attachments/assets/6a79ec77-6ec8-4ce0-aa6a-11c08c2f3ea2)
+# Agent Workflow Architecture
+
+The following diagram shows the complete autonomous agent workflow for dual payment processing and investment management:
+
+```mermaid
+graph TD
+    A["👤 User Request"] --> B["📊 Data Ingestion<br/>(Sync or Upload)"]
+    B --> C["🗄️ Database Storage<br/>(User Data & Context)"]
+    C --> D["🤖 Autonomous Agent<br/>(BDI Decision Engine)"]
+    
+    D --> E["💰 Payment Processing<br/>(Primary Action)"]
+    D --> F["📈 Investment Analysis<br/>(Secondary Action)"]
+    
+    E --> G["💸 Execute Payment<br/>(Cross-border, Currency Exchange)"]
+    F --> H["🔍 Surplus Detection<br/>(Leftover Funds)"]
+    
+    H --> I["📊 Investment Opportunity<br/>Evaluation"]
+    I --> J["⚖️ Risk Assessment<br/>(Payment + Investment)"]
+    
+    G --> K["✅ Payment Validation"]
+    J --> L["🎯 Investment Execution<br/>(Yield Farming, Staking)"]
+    
+    K --> M{"❌ Error?"}
+    L --> N{"❌ Error?"}
+    
+    M -->|Yes| O["🔄 Retry Payment<br/>or Alternative Route"]
+    N -->|Yes| P["🔄 Retry Investment<br/>or Safe Allocation"]
+    
+    O --> K
+    P --> N
+    
+    M -->|No| Q["📋 User Approval<br/>(High-Value Transactions)"]
+    N -->|No| R["📋 Investment Approval<br/>(Risk Threshold Check)"]
+    
+    Q --> S["🚀 Final Execution<br/>(Payment Complete)"]
+    R --> T["🚀 Final Execution<br/>(Investment Complete)"]
+    
+    S --> U["📝 Audit Log<br/>(Payment Records)"]
+    T --> V["📝 Audit Log<br/>(Investment Records)"]
+    
+    U --> W["📊 Performance Tracking"]
+    V --> W
+    
+    W --> X["🔚 End<br/>(Dual Execution Complete)"]
+    
+    subgraph "MCP Tools"
+        Y["💳 Payment Processor"]
+        Z["📈 Market Data"]
+        AA["🏦 Investment Platforms"]
+        BB["⚠️ Risk Assessment"]
+    end
+    
+    E -.-> Y
+    F -.-> Z
+    L -.-> AA
+    J -.-> BB
+```
 
 
 ## 🤖 Agent Architecture Options
@@ -20,10 +75,12 @@ Based on [modern agentic AI principles](https://kanerika.com/blogs/ai-agent-arch
 
 **Core Capabilities:**
 - **Data Ingestion & Sync**: User data synchronization via APIs or direct feeds
-- **Market Analysis**: Real-time FX monitoring, volatility assessment, arbitrage detection  
+- **Payment Processing** (Primary): Cross-border transfers, currency exchanges, transaction routing
+- **Investment Management** (Secondary): Automated investment of surplus funds after transactions
+- **Market Analysis**: Real-time FX monitoring, volatility assessment, investment opportunities
 - **Risk Assessment**: Compliance checking, slippage analysis, counterparty validation
-- **Decision Engine**: BDI cognitive architecture for intelligent planning
-- **Execution**: Payment processing, swaps, cross-chain transactions
+- **Decision Engine**: BDI cognitive architecture for payment optimization and investment allocation
+- **Execution**: Payment processing, investment placement, cross-chain transactions
 - **Audit & Compliance**: Automatic logging, reporting, regulatory compliance
 
 **Advantages:**
@@ -47,8 +104,8 @@ For enterprises requiring **distributed processing** and **specialized expertise
 
 **1. Treasury Manager Agent (Supervisor)**
 - **Role**: Central coordinator using [vertical AI architecture](https://www.ibm.com/think/topics/agentic-architecture)
-- **Responsibilities**: Strategy planning, agent coordination, final decision authority
-- **Capabilities**: Portfolio optimization, liquidity management, risk threshold setting
+- **Responsibilities**: Payment execution strategy, investment allocation for surplus funds, agent coordination
+- **Capabilities**: Payment optimization, surplus fund investment, liquidity management, risk threshold setting
 - **Communication**: Orchestrates other agents via [Agent Communication Protocol](https://www.ibm.com/think/topics/agentic-architecture)
 
 **2. Data Synchronization Agent**
@@ -58,10 +115,10 @@ For enterprises requiring **distributed processing** and **specialized expertise
 - **Integration**: APIs, webhooks, database connectors, file processing
 
 **3. Market Intelligence Agent**
-- **Role**: Real-time market analysis and prediction
-- **Responsibilities**: Price monitoring, volatility analysis, arbitrage detection
-- **Capabilities**: Multi-source data fusion, predictive modeling, alert generation
-- **Tools**: Chainlink oracles, CoinGecko API, bank FX feeds, DeFi protocols
+- **Role**: Real-time market analysis and investment opportunity identification
+- **Responsibilities**: Price monitoring, volatility analysis, investment opportunity detection, payment route optimization
+- **Capabilities**: Multi-source data fusion, predictive modeling, investment yield analysis, alert generation
+- **Tools**: Chainlink oracles, CoinGecko API, bank FX feeds, DeFi protocols, yield farming platforms
 
 **4. Risk Assessment Agent**
 - **Role**: Compliance and safety guardian
@@ -70,10 +127,10 @@ For enterprises requiring **distributed processing** and **specialized expertise
 - **Safety Features**: Kill switch activation, transaction blocking, alert escalation
 
 **5. Execution Agent**
-- **Role**: Payment and swap execution specialist
-- **Responsibilities**: Multi-chain transactions, fiat transfers, order routing
-- **Capabilities**: Gas optimization, slippage management, retry logic, MPC signing
-- **Integrations**: Banking APIs, DEX protocols, cross-chain bridges
+- **Role**: Payment processing and investment execution specialist
+- **Responsibilities**: Multi-chain transactions, fiat transfers, investment placement, order routing
+- **Capabilities**: Gas optimization, slippage management, investment execution, retry logic, MPC signing
+- **Integrations**: Banking APIs, DEX protocols, cross-chain bridges, investment platforms, yield protocols
 
 **6. Audit & Compliance Agent**
 - **Role**: Immutable logging and regulatory reporting
@@ -105,7 +162,9 @@ The multi-agent system can **intelligently select which agents to activate** bas
 The system analyzes user data to determine optimal agent configuration:
 
 **Analysis Criteria:**
-- **Crypto Wallets**: Activates Market Intelligence Agent for DeFi analysis
+- **Payment Volume**: Primary factor for execution agent activation
+- **Surplus Funds**: Triggers investment management capabilities for leftover balances
+- **Crypto Wallets**: Activates Market Intelligence Agent for DeFi analysis and yield opportunities
 - **Transaction Volume**: Triggers Execution Agent for high-throughput processing  
 - **Compliance Requirements**: Enables Risk Assessment Agent for regulatory adherence
 - **Data Sources**: Activates Data Sync Agent for complex integration needs
@@ -120,11 +179,11 @@ The system analyzes user data to determine optimal agent configuration:
 
 | **User Profile** | **Data Characteristics** | **Selected Agents** | **Rationale** |
 |------------------|-------------------------|-------------------|---------------|
-| **Personal User** | Bank account + low volume | Treasury Manager only | Simple payments, minimal complexity |
-| **Crypto Trader** | Multiple wallets + DeFi | Treasury + Market + Execution | Need real-time market analysis |
-| **Small Business** | Mixed accounts + compliance | Treasury + Risk + Audit | Regulatory requirements |
-| **Enterprise** | High volume + multi-region | All 6 agents | Full complexity and scale |
-| **Remittance Service** | Cross-border + high volume | Treasury + Market + Execution + Risk | Speed and compliance critical |
+| **Personal User** | Bank account + low volume + surplus funds | Treasury Manager only | Simple payments + basic investment of leftover funds |
+| **Crypto Trader** | Multiple wallets + DeFi + active trading | Treasury + Market + Execution | Payment processing + yield optimization on idle funds |
+| **Small Business** | Mixed accounts + compliance + cash flow | Treasury + Risk + Audit | Payment execution + compliance + surplus investment |
+| **Enterprise** | High volume + multi-region + complex treasury | All 6 agents | Full payment optimization + sophisticated investment strategies |
+| **Remittance Service** | Cross-border + high volume + float management | Treasury + Market + Execution + Risk | Fast payments + investment of transaction float |
 
 ## 📊 **Multi-Agent System Architecture**
 
@@ -211,30 +270,44 @@ Full Multi-Agent:
 Total: 145-335ms
 ```
 
+### **Cost Comparison**
+
+| **Architecture** | **Personal User** | **Crypto Trader** | **Enterprise** |
+|------------------|------------------|-------------------|----------------|
+| **Single Agent** | $500-800/month | $800-1,200/month | $1,500-2,000/month |
+| **Dynamic Multi-Agent** | $600-900/month (1 agent) | $1,000-1,500/month (3 agents) | $1,800-2,500/month (6 agents) |
+| **Full Multi-Agent** | $2,000-3,000/month | $3,500-5,000/month | $6,000-8,000/month |
+| **Cost Savings** | Dynamic: 30% savings vs Full | Dynamic: 40% savings vs Full | Dynamic: 50% savings vs Full |
+
+**Dynamic Agent Selection Benefits:**
+- **Personal Users**: Only Treasury Manager active → 70% cost reduction vs full multi-agent
+- **Crypto Traders**: 3 agents vs 6 agents → 60% cost reduction vs full multi-agent  
+- **Enterprise**: Smart scaling based on actual needs → 30-50% cost optimization
+
 ### **Use Case Recommendations**
 
 #### **Choose Single Agent When:**
 - ✅ **Startup/SMB**: Limited resources and simpler requirements
 - ✅ **Fast Time-to-Market**: Need to deploy quickly
-- ✅ **Low-Medium Volume**: <1,000 transactions/day
+- ✅ **Low-Medium Volume**: <1,000 transactions/day with basic surplus investment
 - ✅ **Cost-Sensitive**: Budget constraints
-- ✅ **Simple Operations**: Standard payment processing
+- ✅ **Simple Operations**: Standard payment processing + basic investment of leftover funds
 - ✅ **Team Size**: <5 developers
 
 #### **Choose Dynamic Multi-Agent When:**
-- ✅ **Mixed User Base**: Serving different user types (personal to enterprise)
-- ✅ **Cost Optimization**: Want multi-agent benefits with cost control
-- ✅ **Scalable Growth**: Starting small but expect to grow
-- ✅ **Variable Complexity**: Different users have different needs
+- ✅ **Mixed User Base**: Serving different user types (personal to enterprise) with varying investment needs
+- ✅ **Cost Optimization**: Want multi-agent benefits with cost control for payment + investment
+- ✅ **Scalable Growth**: Starting small but expect to grow into sophisticated investment strategies
+- ✅ **Variable Complexity**: Different users have different payment volumes and investment sophistication
 - ✅ **Medium Team**: 5-10 developers, moderate complexity tolerance
 
 #### **Choose Full Multi-Agent When:**
-- ✅ **Enterprise Scale**: High-volume, complex requirements
-- ✅ **Specialized Needs**: Domain-specific expertise required
-- ✅ **High Availability**: Cannot tolerate single points of failure
-- ✅ **Compliance-Heavy**: Strict regulatory requirements
+- ✅ **Enterprise Scale**: High-volume payments with sophisticated investment portfolio management
+- ✅ **Specialized Needs**: Domain-specific expertise required for complex payment routing and investment strategies
+- ✅ **High Availability**: Cannot tolerate single points of failure for critical payment and investment operations
+- ✅ **Compliance-Heavy**: Strict regulatory requirements for both payment processing and investment management
 - ✅ **Large Team**: >10 developers, can manage complexity
-- ✅ **Future-Proofing**: Expect significant growth and feature expansion
+- ✅ **Future-Proofing**: Expect significant growth in both payment volume and investment sophistication
 
 ### **Architecture Decision Framework**
 
@@ -242,32 +315,33 @@ Choose your approach based on your specific requirements:
 
 #### **Option 1: Phased Implementation**
 **Phase 1: Single Agent** (Months 1-4)
-- Deploy simple, unified agent for core functionality
+- Deploy simple, unified agent for core payment processing
+- Implement basic surplus fund investment capabilities
 - Validate market fit and user requirements
 - Establish data flows and basic operations
 
 **Phase 2: Dynamic Multi-Agent** (Months 5-8)
-- Implement intelligent agent selection based on user data
-- Activate specialized agents only when needed
-- Optimize costs while gaining multi-agent benefits
+- Implement intelligent agent selection based on user payment volume and investment sophistication
+- Activate specialized agents for payment optimization and investment management
+- Optimize costs while gaining multi-agent benefits for both functions
 
 **Phase 3: Full Multi-Agent** (Months 9-12)
-- Complete transition to multi-agent architecture
-- Implement advanced features and optimizations
-- Scale individual agents based on demand
+- Complete transition to specialized multi-agent architecture
+- Implement advanced payment routing and sophisticated investment strategies
+- Scale individual agents based on payment volume and investment demand
 
 #### **Option 2: Direct Dynamic Multi-Agent**
-**Best for:** Services with diverse user base from day one
-- Start with data-driven agent selection
-- Scale agents based on actual user needs
-- Optimize costs from the beginning
-- Handle growth automatically
+**Best for:** Services with diverse user base with varying payment and investment needs from day one
+- Start with data-driven agent selection for payment processing and investment management
+- Scale agents based on actual user payment volume and investment sophistication
+- Optimize costs for both payment execution and investment allocation from the beginning
+- Handle growth in both payment complexity and investment requirements automatically
 
 #### **Option 3: Architecture by User Segment**
-- **B2C Personal**: Single Agent
-- **B2B SMB**: Dynamic Multi-Agent  
-- **Enterprise**: Full Multi-Agent
-- Run different architectures for different customer tiers
+- **B2C Personal**: Single Agent (basic payments + simple investment of leftover funds)
+- **B2B SMB**: Dynamic Multi-Agent (optimized payment routing + moderate investment strategies)
+- **Enterprise**: Full Multi-Agent (sophisticated payment processing + complex investment portfolio management)
+- Run different architectures for different customer payment volumes and investment sophistication levels
 
 ## 🔄 **User Data Synchronization Layer**
 
@@ -329,28 +403,34 @@ The autonomous agent processes user data through filtering, analysis, and decisi
 The system leverages **Model Context Protocol (MCP) servers** for [autonomous tool orchestration](https://syncari.com/blog/why-enterprise-data-architects-need-agentic-mdm-now/):
 
 ### **Available MCP Tools:**
-- **Market Data Tool**: Real-time price feeds, volatility analysis
-- **Payment Processor Tool**: Bank transfers, SWIFT integration  
-- **Crypto Exchange Tool**: DEX swaps, cross-chain bridges
-- **Risk Assessment Tool**: Compliance checking, KYB/AML validation
-- **Audit Logger Tool**: Immutable transaction logging
-- **Notification Tool**: Alerts, reports, user communications
+- **Market Data Tool**: Real-time price feeds, volatility analysis, yield opportunities
+- **Payment Processor Tool**: Bank transfers, SWIFT integration, cross-border payments  
+- **Investment Tool**: Automated surplus fund investment, yield farming, portfolio rebalancing
+- **Crypto Exchange Tool**: DEX swaps, cross-chain bridges, liquidity mining
+- **Risk Assessment Tool**: Compliance checking, KYB/AML validation, investment risk analysis
+- **Audit Logger Tool**: Immutable transaction logging, investment tracking
+- **Notification Tool**: Alerts, reports, user communications, investment performance updates
 
 ### **Tool Calling Example:**
 
-**Autonomous Payment Agent Process:**
-1. **Belief Formation**: Update agent context with user data and market conditions
-2. **Desire Alignment**: Configure priorities based on user preferences (cost, risk, speed)
-3. **Risk Assessment**: Evaluate transaction through MCP risk assessment tool
-4. **Decision Logic**: Compare risk scores against configured thresholds
-5. **Execution**: Process payment using optimal method via MCP payment processor
-6. **Audit Trail**: Log all decisions and outcomes via MCP audit logger
+**Autonomous Payment & Investment Agent Process:**
+1. **Belief Formation**: Update agent context with user data, payment requirements, and market conditions
+2. **Desire Alignment**: Configure priorities based on user preferences (cost, risk, speed, investment goals)
+3. **Payment Execution**: Process primary payment transaction using optimal routing
+4. **Surplus Detection**: Identify remaining funds after payment completion
+5. **Investment Analysis**: Evaluate investment opportunities for surplus funds via MCP investment tool
+6. **Risk Assessment**: Evaluate both payment and investment risks through MCP risk assessment tool
+7. **Decision Logic**: Execute payment first, then invest surplus based on risk/return analysis
+8. **Dual Execution**: Process payment and investment transactions via respective MCP tools
+9. **Audit Trail**: Log all payment and investment decisions via MCP audit logger
 
 **Key Integration Points:**
-- **MCP Server Integration**: Seamless tool calling for all external services
-- **BDI Framework**: Belief-Desire-Intention cognitive architecture
-- **Risk Management**: Automated risk evaluation and threshold enforcement
-- **Audit Compliance**: Comprehensive logging of all agent decisions and actions
+- **MCP Server Integration**: Seamless tool calling for payment processing and investment services
+- **BDI Framework**: Belief-Desire-Intention cognitive architecture for dual-purpose operations
+- **Dual Risk Management**: Automated risk evaluation for both payments and investments
+- **Priority Execution**: Payment processing takes priority, investment is secondary optimization
+- **Surplus Optimization**: Intelligent allocation of leftover funds for yield generation
+- **Audit Compliance**: Comprehensive logging of all payment and investment decisions
 
 ## 🛠️ Technical Implementation Stack
 
@@ -414,10 +494,11 @@ Based on [the latest AI agent platforms in 2025](https://www.marketermilk.com/bl
 
 #### **MCP Tool Categories for Payment Agent:**
 
-**Market Tools:**
+**Market Data Tools:**
 - Coinbase API: Real-time crypto prices
 - Forex API: Fiat exchange rates  
 - Volatility Analyzer: Market volatility analysis
+- Yield Scanner: DeFi yield opportunities
 - Liquidity Checker: DEX liquidity analysis
 
 **Payment Tools:**
@@ -426,16 +507,24 @@ Based on [the latest AI agent platforms in 2025](https://www.marketermilk.com/bl
 - Crypto Sender: Blockchain transactions
 - Cross-chain Bridge: Multi-chain transfers
 
+**Investment Tools:**
+- Yield Farmer: Automated DeFi yield farming
+- Portfolio Manager: Asset allocation optimization
+- Staking Validator: Proof-of-stake rewards
+- Liquidity Provider: DEX liquidity mining
+- Treasury Bills: Government bond allocation
+
 **Risk Tools:**
 - KYB Validator: Know Your Business checks
 - Sanctions Checker: OFAC compliance
 - Fraud Detector: Transaction risk scoring
 - AML Monitor: Anti-money laundering
+- Investment Risk Analyzer: Portfolio risk assessment
 
 **Audit Tools:**
-- Transaction Logger: Immutable audit trails
-- Compliance Reporter: Regulatory reporting
-- Performance Tracker: Agent performance metrics
+- Transaction Logger: Immutable audit trails for payments and investments
+- Compliance Reporter: Regulatory reporting for both payment and investment activities
+- Performance Tracker: Agent performance metrics for payment execution and investment returns
 
 ### **Core Development Technologies**
 
@@ -579,44 +668,85 @@ Based on [expert reviews of AI agent platforms](https://www.marketermilk.com/blo
 
 This comprehensive technical stack provides everything needed to build, deploy, and scale your autonomous payment agent system, from development frameworks to production hosting solutions.
 
-## 🚀 Updated Implementation Roadmap
+## 🚀 Timeline (20 Weeks)
 
-### Phase 1: Core Infrastructure
-- [ ] **Single agent framework** setup with BDI architecture
-- [ ] **User data synchronization** APIs and webhooks
-- [ ] **MCP server** foundation with basic tool calling
-- [ ] **Database schema** for user data and transaction logs
-- [ ] **Basic UI dashboard** for monitoring and controls
+### **Week 1-5: Foundation & Core Setup**
+- **Week 1**: Project setup, environment configuration, database design
+- **Week 2**: Basic agent framework implementation with BDI architecture
+- **Week 3**: User data synchronization APIs and database integration
+- **Week 4**: MCP server foundation with basic tool calling structure
+- **Week 5**: Core agent logic and decision-making framework
 
-### Phase 2: Intelligence & Data Processing
-- [ ] **LLM integration** (GPT-4/Claude) for cognitive decision-making
+### **Week 6-10: Intelligence & Market Integration**
+- **Week 6**: LLM integration (GPT-4/Claude) for decision-making
+- **Week 7**: Market data APIs integration and real-time price feeds
+- **Week 8**: Payment routing logic and cost optimization algorithms
+- **Week 9**: Basic surplus detection and investment opportunity analysis
+- **Week 10**: Risk assessment algorithms and compliance framework
+
+**🎯 MVP Prototype Ready: Week 10** (Basic payment + investment decisions working)
+
+### **Week 11-15: Execution & Tool Development**
+- **Week 11**: Payment processor integration (banking APIs, crypto tools)
+- **Week 12**: Investment platform integration (DeFi, yield farming, staking)
+- **Week 13**: Advanced risk assessment tools and compliance checking
+- **Week 14**: Dual execution engine (payment + investment workflow)
+- **Week 15**: End-to-end workflow testing and optimization
+
+**🚀 Functional Prototype Ready: Week 15** (End-to-end automation working)
+
+### **Week 16-20: Production & Optimization**
+- **Week 16**: Security implementation (MPC wallets, audit logging)
+- **Week 17**: UI dashboard for monitoring and controls
+- **Week 18**: Comprehensive testing, debugging, and performance optimization
+- **Week 19**: Security testing, penetration testing, and final optimizations
+- **Week 20**: Production deployment, documentation, and system handover
+
+**✅ Production System Ready: Week 20** (Full production deployment)
+
+---
+
+### Phase 1: Core Infrastructure (4 weeks)
+- [ ] **Single agent framework** setup with BDI architecture for payment + investment decisions
+- [ ] **User data synchronization** APIs and webhooks for account balances and transaction history
+- [ ] **MCP server** foundation with payment processing and basic investment tools
+- [ ] **Database schema** for user data, transaction logs, and investment records
+- [ ] **Basic UI dashboard** for monitoring payments, investments, and surplus fund allocation
+
+### Phase 2: Intelligence & Data Processing (4 weeks)
+- [ ] **LLM integration** (GPT-4/Claude) for dual payment and investment decision-making
 - [ ] **Data filtering and validation** using [agentic MDM principles](https://syncari.com/blog/why-enterprise-data-architects-need-agentic-mdm-now/)
-- [ ] **Market analysis tools** via MCP server
-- [ ] **Risk assessment algorithms** with compliance checking
-- [ ] **Simulation/dry-run mode** for testing decisions
+- [ ] **Market analysis tools** via MCP server for payment optimization and yield opportunities
+- [ ] **Risk assessment algorithms** with compliance checking for both payments and investments
+- [ ] **Surplus detection logic** to identify funds available for investment after payment completion
+- [ ] **Simulation/dry-run mode** for testing both payment routing and investment allocation decisions
 
-### Phase 3: Execution & Tool Integration
-- [ ] **MCP tool development** for payment processors
-- [ ] **Multi-chain support** through crypto tools
-- [ ] **Fiat integration** via banking APIs
-- [ ] **MPC wallet setup** with multisig security
-- [ ] **Real-time execution engine** with retry logic
+### Phase 3: Execution & Tool Integration (4 weeks)
+- [ ] **MCP tool development** for payment processors and investment platforms
+- [ ] **Multi-chain support** through crypto tools for payments and DeFi investments
+- [ ] **Fiat integration** via banking APIs for traditional payments and investment products
+- [ ] **Investment tool integration** for yield farming, staking, and portfolio management
+- [ ] **MPC wallet setup** with multisig security for both payment and investment transactions
+- [ ] **Dual execution engine** with priority for payments, secondary for investment allocation
+- [ ] **Real-time execution** with retry logic for both payment and investment transactions
 
-### Phase 4: Production & Optimization
-- [ ] **Advanced monitoring** with Grafana dashboards
-- [ ] **Compliance automation** and audit trail features
-- [ ] **Performance optimization** and scaling
-- [ ] **Security audits** and penetration testing
-- [ ] **Machine learning** feedback loops for continuous improvement
+### Phase 4: Production & Optimization (4 weeks)
+- [ ] **Advanced monitoring** with Grafana dashboards for payment success rates and investment performance
+- [ ] **Compliance automation** and audit trail features for both payment and investment activities
+- [ ] **Performance optimization** for payment speed and investment yield optimization
+- [ ] **Security audits** and penetration testing for dual-purpose financial operations
+- [ ] **Machine learning** feedback loops for continuous improvement in payment routing and investment allocation
+- [ ] **ROI tracking** and performance analytics for surplus fund investment decisions
 
 ## 🔒 Security & Compliance
 
-- **Immutable audit logs** for all agent decisions
-- **GDPR compliance** for data handling
-- **KYB/AML** verification for all counterparties
-- **Kill switch** for emergency shutdowns
-- **Role-based access control** (admin/observer roles)
-- **Simulated mode** before live execution
+- **Immutable audit logs** for all agent payment and investment decisions
+- **GDPR compliance** for financial data handling and investment preferences
+- **KYB/AML** verification for all payment counterparties and investment platforms
+- **Investment compliance** checking for regulatory restrictions and user-defined risk limits
+- **Kill switch** for emergency shutdowns of both payment processing and investment activities
+- **Role-based access control** (admin/observer roles) with separate permissions for payment and investment functions
+- **Simulated mode** before live execution for both payment routing and investment allocation testing
 
 ## 🧠 Agent Intelligence & Behavior
 
@@ -626,85 +756,104 @@ Each agent operates using the **Belief-Desire-Intention** model as described in 
 
 #### Treasury Manager Agent (Cognitive Architecture)
 **Beliefs Formation:**
-- Current market conditions: Volatility levels, liquidity status, price trends
-- Account balances: Multi-currency positions across platforms
-- Regulatory status: Regional compliance requirements and status
+- Current market conditions: Volatility levels, liquidity status, price trends, yield opportunities
+- Account balances: Multi-currency positions across platforms, surplus funds available for investment
+- Payment requirements: Transaction amounts, destinations, urgency levels
+- Investment landscape: Available yields, risk-return profiles, market opportunities
+- Regulatory status: Regional compliance requirements for both payments and investments
 
 **Desires Hierarchy:**
-- Ensure compliance: Highest priority (1.0) - Regulatory adherence
-- Minimize risk: High priority (0.9) - Capital preservation  
-- Minimize cost: High priority (0.8) - Fee optimization
-- Maximize speed: Medium priority (0.6) - Execution efficiency
+1. **Execute payments** (Priority 1.0): Complete all required payment transactions first
+2. **Ensure compliance** (Priority 0.95): Regulatory adherence for both payments and investments
+3. **Optimize surplus investment** (Priority 0.9): Maximize returns on leftover funds after payments
+4. **Minimize risk** (Priority 0.85): Capital preservation for both payment and investment activities
+5. **Minimize cost** (Priority 0.8): Fee optimization for payments, cost-effective investment allocation
+6. **Maximize speed** (Priority 0.6): Fast payment execution, efficient investment placement
 
 **Intentions Planning:**
-- Route selection: Algorithm chooses optimal cost-effective paths
-- Timing strategy: Market-driven execution timing decisions
-- Risk mitigation: Automated safeguards and circuit breakers
+- **Payment-first execution**: Complete all payment transactions before considering investments
+- **Surplus identification**: Calculate remaining funds available for investment after payment completion
+- **Route selection**: Algorithm chooses optimal cost-effective payment paths
+- **Investment allocation**: Automated surplus fund investment based on risk tolerance and yield opportunities
+- **Timing strategy**: Market-driven execution timing for both payments and investment decisions
+- **Risk mitigation**: Automated safeguards and circuit breakers for dual-purpose operations
 
 #### Market Analysis Agent (Reactive + Deliberative)
 **Reactive Capabilities:**
-- Immediate response to rate changes above 5% threshold
-- Real-time volatility spike detection and alerts
-- Automated notification system for treasury manager
+- Immediate response to rate changes above 5% threshold affecting payment costs
+- Real-time volatility spike detection and alerts for both payment timing and investment opportunities
+- Yield opportunity alerts when investment returns exceed threshold levels
+- Automated notification system for treasury manager on market conditions
 
 **Deliberative Analysis:**
-- Strategic market trend analysis and forecasting
-- Arbitrage opportunity identification across exchanges
-- Optimal route calculation with confidence scoring
-- Reasoning-based recommendations with market context
+- Strategic market trend analysis for payment optimization and investment forecasting
+- Arbitrage opportunity identification across exchanges for both payment routing and investment placement
+- Investment yield analysis and risk-return optimization for surplus funds
+- Optimal route calculation with confidence scoring for payments
+- Investment opportunity evaluation with expected return calculations
+- Reasoning-based recommendations with market context for both payment execution and surplus allocation
 
 ## 🔧 Configuration Examples
 
 ### Rule-Based Decision Engine
 **Core Rule Categories:**
-- **High-Value Approval**: Transactions above $100,000 require human approval
-- **Market Volatility**: Delay execution when volatility exceeds 20%
-- **Arbitrage Opportunity**: Immediate execution for profit margins above 0.5%
-- **Compliance Check**: Block transactions to sanctioned destinations
+- **High-Value Approval**: Payment transactions above $100,000 require human approval
+- **Investment Limits**: Surplus fund investments limited to maximum percentage of total balance
+- **Market Volatility**: Delay payment execution when volatility exceeds 20%, pause investments during extreme volatility
+- **Yield Opportunity**: Automatic investment when surplus funds exceed minimum threshold and yield above target rate
+- **Risk Management**: Block high-risk investments, limit exposure to single investment type
+- **Compliance Check**: Block payments to sanctioned destinations, verify investment platform compliance
 
 **Rule Parameters:**
-- **Thresholds**: Configurable limits for amount, volatility, profit margins
-- **Actions**: Approval workflows, execution delays, immediate processing, blocking
-- **Conditions**: Market-based, compliance-based, amount-based triggers
+- **Payment Thresholds**: Configurable limits for transaction amounts, volatility, execution timing
+- **Investment Thresholds**: Minimum surplus amount, maximum investment percentage, target yield rates
+- **Actions**: Approval workflows, execution delays, immediate processing, blocking, investment allocation
+- **Conditions**: Market-based, compliance-based, amount-based, yield-based triggers
 
 ### Agent Communication Protocol
 **Multi-Agent Coordination:**
-- **Treasury Manager**: Central coordinator optimizing payment execution
-- **Market Analyst**: Real-time market intelligence and arbitrage detection
-- **Risk Assessor**: Compliance verification and risk evaluation
-- **Execution Specialist**: Transaction processing and route optimization
+- **Treasury Manager**: Central coordinator optimizing payment execution and surplus fund investment
+- **Market Analyst**: Real-time market intelligence for payment optimization and investment opportunities
+- **Risk Assessor**: Compliance verification and risk evaluation for both payments and investments
+- **Execution Specialist**: Payment transaction processing and investment placement optimization
 
 **Communication Features:**
-- **Role-based messaging**: Agents communicate based on specialized expertise
-- **Tool integration**: Each agent has access to domain-specific tools
-- **LLM configuration**: Customized language models for different agent types
+- **Priority-based messaging**: Payment execution takes priority over investment discussions
+- **Role-based messaging**: Agents communicate based on specialized expertise in payments or investments
+- **Tool integration**: Each agent has access to domain-specific tools for both payment and investment functions
+- **LLM configuration**: Customized language models for different agent types with dual-purpose capabilities
 
 ## 📊 Monitoring & Observability
 
 ### Key Metrics Dashboard
-- **Agent Performance**: Decision accuracy, response time, success rate
-- **Financial Metrics**: Cost savings, slippage, execution speed
-- **Risk Metrics**: Exposure levels, compliance violations, failed transactions
-- **System Health**: Uptime, error rates, resource utilization
+- **Agent Performance**: Decision accuracy for payments and investments, response time, success rate
+- **Payment Metrics**: Cost savings, slippage, execution speed, payment success rate
+- **Investment Metrics**: Surplus fund utilization rate, investment yield, ROI on invested surplus
+- **Risk Metrics**: Payment exposure levels, investment risk scores, compliance violations, failed transactions
+- **System Health**: Uptime, error rates, resource utilization for both payment and investment operations
 
 ### Alert Thresholds
 **Critical Alerts:**
-- Transaction failure rate exceeding 1%
+- Payment transaction failure rate exceeding 1%
+- Investment loss exceeding defined risk tolerance
 - System downtime beyond 5 minutes
-- Compliance violations requiring immediate attention
+- Compliance violations requiring immediate attention for payments or investments
 
 **Warning Alerts:**
-- High slippage above 2% threshold
-- Unusual market conditions detected
-- Agent response time exceeding 30 seconds
+- High payment slippage above 2% threshold
+- Low investment yields below expected returns
+- Unusual market conditions affecting payments or investment opportunities
+- Agent response time exceeding 30 seconds for payment or investment decisions
+- Surplus fund allocation falling below optimization targets
 
 ## 🚨 Emergency Procedures
 
 ### Kill Switch Protocol
-1. **Immediate Halt**: Stop all pending transactions
-2. **Asset Protection**: Secure all funds in safe wallets
-3. **Notification**: Alert operations team and stakeholders
-4. **Investigation**: Log incident for post-mortem analysis
+1. **Immediate Halt**: Stop all pending payment transactions and investment placements
+2. **Asset Protection**: Secure all funds in safe wallets, liquidate risky investments if necessary
+3. **Investment Freeze**: Halt all new investment activities while maintaining existing positions
+4. **Notification**: Alert operations team and stakeholders about payment and investment suspension
+5. **Investigation**: Log incident for post-mortem analysis of both payment and investment operations
 
 ### Disaster Recovery
 - **Backup Systems**: Hot standby with 99.9% data replication
@@ -713,24 +862,36 @@ Each agent operates using the **Belief-Desire-Intention** model as described in 
 
 ## 📈 Success Metrics
 
-- **Cost Reduction**: 30% reduction in payment fees
-- **Speed**: 80% faster cross-border settlements
-- **Accuracy**: 99.9% successful transaction rate
-- **Compliance**: 100% audit trail coverage
-- **Uptime**: 99.95% system availability
+**Payment Performance:**
+- **Cost Reduction**: 30% reduction in payment fees through optimal routing
+- **Speed**: 80% faster cross-border settlements via automated optimization
+- **Accuracy**: 99.9% successful payment transaction rate
+- **Compliance**: 100% audit trail coverage for payment activities
+
+**Investment Performance:**
+- **Surplus Utilization**: 95% of available surplus funds actively invested
+- **Investment Returns**: Target 5-15% annual yield on surplus funds depending on risk tolerance
+- **Capital Preservation**: Maximum 2% loss tolerance on invested surplus funds
+- **Investment Accuracy**: 95% successful investment placement rate
+
+**System Performance:**
+- **Uptime**: 99.95% system availability for both payment and investment operations
+- **Dual Execution**: 98% success rate for completing both payment and subsequent investment in single workflow
 
 ## 🔄 Continuous Learning
 
-The system implements **feedback loops** to improve decision-making:
+The system implements **feedback loops** to improve both payment and investment decision-making:
 
 **Learning Mechanisms:**
-- **Outcome Recording**: Store decision context, chosen actions, and results
-- **Performance Analysis**: Analyze historical data for pattern recognition
-- **Model Updates**: Fine-tune decision models based on performance metrics
-- **Adaptive Thresholds**: Automatically adjust risk and cost thresholds
+- **Dual Outcome Recording**: Store payment execution results and investment performance data
+- **Performance Analysis**: Analyze historical data for payment optimization and investment pattern recognition
+- **Model Updates**: Fine-tune decision models for both payment routing and surplus investment allocation
+- **Adaptive Thresholds**: Automatically adjust payment cost thresholds and investment risk/return targets
 
 **Data Collection:**
-- **Decision Factors**: Market conditions, user preferences, historical context
-- **Action Results**: Success rates, execution times, cost effectiveness
-- **Performance Metrics**: ROI, risk-adjusted returns, user satisfaction scores
-- **Continuous Improvement**: Regular model retraining and optimization
+- **Payment Factors**: Market conditions, transaction costs, execution speed, user payment preferences
+- **Investment Factors**: Yield opportunities, risk levels, market conditions, user investment tolerance
+- **Action Results**: Payment success rates, execution times, cost effectiveness, investment returns, surplus utilization
+- **Performance Metrics**: Payment cost savings, investment ROI, risk-adjusted returns, dual-execution success rates
+- **User Satisfaction**: Feedback on both payment speed/cost and investment performance
+- **Continuous Improvement**: Regular model retraining for payment optimization and investment allocation strategies
