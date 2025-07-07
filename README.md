@@ -39,7 +39,7 @@ graph TD
     O --> K
     P --> N
     
-    M -->|No| Q["📋 User Approval<br/>(High-Value Transactions)"]
+    M -->|No| Q["📋 User Approval<br/>"]
     N -->|No| R["📋 Investment Approval<br/>(Risk Threshold Check)"]
     
     Q --> S["🚀 Final Execution<br/>(Payment Complete)"]
@@ -185,23 +185,6 @@ The system analyzes user data to determine optimal agent configuration:
 | **Enterprise** | High volume + multi-region + complex treasury | All 6 agents | Full payment optimization + sophisticated investment strategies |
 | **Remittance Service** | Cross-border + high volume + float management | Treasury + Market + Execution + Risk | Fast payments + investment of transaction float |
 
-## 📊 **Multi-Agent System Architecture**
-
-The following diagrams show how a multi-agent system would handle the same requirements:
-
-*The above diagram shows the distributed multi-agent architecture with specialized roles and inter-agent communication.*
-
-## 🔄 **Dynamic Agent Selection Workflow**
-
-This flowchart shows how the system intelligently selects which agents to activate based on user data analysis:
-
-*The above diagram demonstrates the data-driven agent selection process that can reduce costs by 30-70% by only activating necessary agents.*
-
-## 🤝 **Dynamic Multi-Agent Collaboration Workflow**
-
-This sequence diagram shows how different user profiles trigger different agent combinations:
-
-*The above sequence demonstrates three scenarios: Personal User (1 agent), Crypto Trader (3 agents), and Enterprise (6 agents), showing cost optimization through selective activation.*
 
 ## ⚖️ **Comprehensive Architecture Comparison**
 
@@ -314,21 +297,11 @@ Total: 145-335ms
 Choose your approach based on your specific requirements:
 
 #### **Option 1: Phased Implementation**
-**Phase 1: Single Agent** (Months 1-4)
+**Phase 1: Single Agent** 
 - Deploy simple, unified agent for core payment processing
 - Implement basic surplus fund investment capabilities
 - Validate market fit and user requirements
 - Establish data flows and basic operations
-
-**Phase 2: Dynamic Multi-Agent** (Months 5-8)
-- Implement intelligent agent selection based on user payment volume and investment sophistication
-- Activate specialized agents for payment optimization and investment management
-- Optimize costs while gaining multi-agent benefits for both functions
-
-**Phase 3: Full Multi-Agent** (Months 9-12)
-- Complete transition to specialized multi-agent architecture
-- Implement advanced payment routing and sophisticated investment strategies
-- Scale individual agents based on payment volume and investment demand
 
 #### **Option 2: Direct Dynamic Multi-Agent**
 **Best for:** Services with diverse user base with varying payment and investment needs from day one
@@ -390,8 +363,6 @@ The system now features a **single autonomous agent** with [**MCP server integra
 
 ### 1. **Single Agent: User Data Sync + Payment Processing**
 This workflow shows how user data is synchronized and processed through a single autonomous agent using [**agentic MDM principles**](https://syncari.com/blog/why-enterprise-data-architects-need-agentic-mdm-now/):
-
-*The above sequence demonstrates the streamlined flow from user data ingestion to payment execution via MCP server tool calling in a single agent system.*
 
 ### 2. **Single Agent: Intelligent Data Processing Pipeline**
 The autonomous agent processes user data through filtering, analysis, and decision-making:
