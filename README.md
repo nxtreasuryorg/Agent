@@ -122,7 +122,7 @@ For enterprises requiring **distributed processing** and **specialized expertise
 
 **4. Risk Assessment Agent**
 - **Role**: Compliance and safety guardian
-- **Responsibilities**: KYB/AML checks, regulatory compliance, transaction risk scoring
+- **Responsibilities**: Minimum balance checks, regulatory compliance, transaction risk scoring
 - **Capabilities**: Real-time risk calculation, sanctions screening, fraud detection
 - **Safety Features**: Kill switch activation, transaction blocking, alert escalation
 
@@ -378,7 +378,7 @@ The system leverages **Model Context Protocol (MCP) servers** for [autonomous to
 - **Payment Processor Tool**: Bank transfers, SWIFT integration, cross-border payments  
 - **Investment Tool**: Automated surplus fund investment, yield farming, portfolio rebalancing
 - **Crypto Exchange Tool**: DEX swaps, cross-chain bridges, liquidity mining
-- **Risk Assessment Tool**: Compliance checking, KYB/AML validation, investment risk analysis
+- **Risk Assessment Tool**: Compliance checking, minimum balance validation, account threshold analysis
 - **Audit Logger Tool**: Immutable transaction logging, investment tracking
 - **Notification Tool**: Alerts, reports, user communications, investment performance updates
 
@@ -486,11 +486,11 @@ Based on [the latest AI agent platforms in 2025](https://www.marketermilk.com/bl
 - Treasury Bills: Government bond allocation
 
 **Risk Tools:**
-- KYB Validator: Know Your Business checks
+- Balance Validator: Minimum account balance requirements checker
 - Sanctions Checker: OFAC compliance
 - Fraud Detector: Transaction risk scoring
 - AML Monitor: Anti-money laundering
-- Investment Risk Analyzer: Portfolio risk assessment
+- Account Threshold Monitor: Minimum balance enforcement
 
 **Audit Tools:**
 - Transaction Logger: Immutable audit trails for payments and investments
@@ -587,19 +587,13 @@ Based on [the latest AI agent platforms in 2025](https://www.marketermilk.com/bl
 
 ### **Security & Compliance Tools**
 
-#### **MPC Wallet Integration:**
+#### **Self-Custody Wallet Integration:**
 
-**1. Fireblocks**
-- **Purpose**: Enterprise-grade MPC wallet infrastructure
-- **Features**: Multi-party computation, institutional security, API integration
-- **Capabilities**: Vault management, policy engine, transaction workflows
-- **Benefits**: Regulatory compliance, insurance coverage, 24/7 monitoring
-
-**2. Gnosis Safe (Multisig)**
-- **Purpose**: Multi-signature wallet security for crypto transactions
-- **Features**: Multi-owner wallets, spending policies, transaction batching
-- **Capabilities**: Programmable safety, social recovery, gas optimization
-- **Benefits**: Distributed security, transparent operations, community audited
+**1. Custom Wallet Infrastructure**
+- **Purpose**: Proprietary self-custody wallet solution
+- **Features**: Direct key management, custom security protocols, API integration
+- **Capabilities**: Full custody control, custom transaction workflows, proprietary security
+- **Benefits**: Complete ownership, custom features, reduced third-party dependencies
 
 ### **Monitoring & Observability**
 
@@ -653,7 +647,7 @@ This comprehensive technical stack provides everything needed to build, deploy, 
 - **Week 7**: Market data APIs integration and real-time price feeds
 - **Week 8**: Payment routing logic and cost optimization algorithms
 - **Week 9**: Basic surplus detection and investment opportunity analysis
-- **Week 10**: Risk assessment algorithms and compliance framework
+- **Week 10**: Risk assessment algorithms and minimum balance framework
 
 **🎯 MVP Prototype Ready: Week 10** (Basic payment + investment decisions working)
 
@@ -688,7 +682,7 @@ This comprehensive technical stack provides everything needed to build, deploy, 
 - [ ] **LLM integration** (GPT-4/Claude) for dual payment and investment decision-making
 - [ ] **Data filtering and validation** using [agentic MDM principles](https://syncari.com/blog/why-enterprise-data-architects-need-agentic-mdm-now/)
 - [ ] **Market analysis tools** via MCP server for payment optimization and yield opportunities
-- [ ] **Risk assessment algorithms** with compliance checking for both payments and investments
+- [ ] **Risk assessment algorithms** with minimum balance checking for both payments and investments
 - [ ] **Surplus detection logic** to identify funds available for investment after payment completion
 - [ ] **Simulation/dry-run mode** for testing both payment routing and investment allocation decisions
 
@@ -697,7 +691,7 @@ This comprehensive technical stack provides everything needed to build, deploy, 
 - [ ] **Multi-chain support** through crypto tools for payments and DeFi investments
 - [ ] **Fiat integration** via banking APIs for traditional payments and investment products
 - [ ] **Investment tool integration** for yield farming, staking, and portfolio management
-- [ ] **MPC wallet setup** with multisig security for both payment and investment transactions
+- [ ] **Self-custody wallet setup** with proprietary security for both payment and investment transactions
 - [ ] **Dual execution engine** with priority for payments, secondary for investment allocation
 - [ ] **Real-time execution** with retry logic for both payment and investment transactions
 
@@ -713,7 +707,7 @@ This comprehensive technical stack provides everything needed to build, deploy, 
 
 - **Immutable audit logs** for all agent payment and investment decisions
 - **GDPR compliance** for financial data handling and investment preferences
-- **KYB/AML** verification for all payment counterparties and investment platforms
+- **Minimum balance verification** for all payment accounts and investment platforms
 - **Investment compliance** checking for regulatory restrictions and user-defined risk limits
 - **Kill switch** for emergency shutdowns of both payment processing and investment activities
 - **Role-based access control** (admin/observer roles) with separate permissions for payment and investment functions
