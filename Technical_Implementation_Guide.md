@@ -2,7 +2,7 @@
 
 ## 📋 Guide Purpose & Instructions
 
-### For AI Assistants Building This System
+### For Assistants Building This System
 
 This document is a comprehensive blueprint for building the Nxtreasury Single Agent - an autonomous AI system that handles payment processing and investment management. As an AI assistant tasked with implementing this system, you should:
 
