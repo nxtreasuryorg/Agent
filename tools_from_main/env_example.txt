@@ -1,0 +1,47 @@
+# Complete Tools Environment Variables
+# Copy this file to .env and fill in your values
+
+# === WALLET PAYMENT TOOLS ===
+
+# Required: Infura API key for Ethereum connection
+# Get from: https://infura.io/
+INFURA_API_KEY=your_infura_project_id_here
+
+# Required: Fernet key for private key encryption
+# Generate with: python -c "from cryptography.fernet import Fernet; print(Fernet.generate_key().decode())"
+FERNET_KEY=your_fernet_key_here
+
+# Optional: Etherscan API key for transaction history
+# Get from: https://etherscan.io/apis
+ETHERSCAN_API_KEY=your_etherscan_api_key_here
+
+# === AZURE SQL DATABASE TOOLS ===
+
+# Required: Azure SQL Server name (without https://)
+# Example: myserver.database.windows.net
+AZURE_SQL_SERVER=your_server.database.windows.net
+
+# Required: Azure SQL Database name
+AZURE_SQL_DATABASE=your_database_name
+
+# Required: Azure SQL Database username
+AZURE_SQL_USERNAME=your_username
+
+# Required: Azure SQL Database password
+AZURE_SQL_PASSWORD=your_password
+
+# === SHAREPOINT INTEGRATION (Optional) ===
+
+# Optional: Microsoft Graph API token for SharePoint access
+GRAPH_ACCESS_TOKEN=your_graph_token_here
+
+# Optional: SharePoint Site ID
+SHAREPOINT_SITE_ID=your_site_id_here
+
+# Optional: SharePoint folder path to sync
+SHAREPOINT_FOLDER_PATH=Documents
+
+# === ADDITIONAL CONFIGURATION ===
+
+# Optional: Alternative config file path for Azure SQL settings
+# AZURE_SQL_CONFIG_PATH=/path/to/config.yaml 

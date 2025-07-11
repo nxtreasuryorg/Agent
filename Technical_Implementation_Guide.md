@@ -112,17 +112,11 @@ Before you begin building, ensure you understand these core concepts that appear
 
 #### Step 1.1: Development Environment
 **What to Build:**
-- Local development environment with Docker containers
-- PostgreSQL database for transactional data
-- Redis cache for real-time data
-- Basic CI/CD pipeline setup
+- Build a simple agent with crewai and bedrock 
 
 **Priority Tasks:**
 1. Set up Python 3.11+ environment with virtual environments
-2. Install core dependencies: FastAPI, SQLAlchemy, Redis, Pydantic
-3. Configure PostgreSQL with proper schemas for user data and transactions
-4. Set up Redis for caching exchange rates and session management
-5. Create basic Docker containerization for services
+2. Requirements.txt
 
 **Key Decisions:**
 - Database schema design for user profiles and payment history

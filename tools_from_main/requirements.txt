@@ -1,0 +1,39 @@
+# Wallet Payment Tools Dependencies
+
+# Core Web3 and blockchain libraries
+web3>=6.0.0
+cryptography>=3.4.8
+
+# HTTP requests
+requests>=2.25.0
+
+# Environment variables support
+python-dotenv>=0.19.0
+
+# Optional: For enhanced functionality
+eth-account>=0.8.0
+eth-utils>=2.0.0
+
+# Excel Reader and Azure SQL Tools Dependencies
+
+# Data processing and analysis
+pandas>=2.0.0
+numpy>=1.24.0
+
+# Excel file support
+openpyxl>=3.1.2
+xlsxwriter>=3.1.0
+
+# Azure SQL Database connectivity
+pyodbc>=4.0.39
+
+# Configuration file support
+PyYAML>=6.0.1
+
+# Progress bars and visualization
+tqdm>=4.66.0
+matplotlib>=3.5.0
+seaborn>=0.12.0
+
+# Additional utilities
+typing-extensions>=4.8.0 
