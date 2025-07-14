@@ -1,4 +1,181 @@
-User name is John Doe.
-User is an AI Engineer.
-User is interested in AI Agents.
-User is based in San Francisco, California.
+# HIERARCHICAL TREASURY TEAM - USER PREFERENCES
+[Configuration for Treasury Manager and Specialist Agents]
+
+# USER PROFILE
+[Basic user information for all agents]
+Name: Skywalker
+Company: Treasury Company
+Role: Treasury manager 
+Location: Zurich
+Time Zone: Zurich
+Preferred Language: English
+Treasury Management Style: Custom
+
+# TREASURY MANAGER PREFERENCES
+[High-level coordination and decision-making preferences]
+
+## Manager Decision Authority
+Auto-Approval Threshold: $10,000
+Escalation Threshold: $50,000
+Team Coordination Style: Manager Override
+Risk Override Authority: Yes
+
+## Core Business Rules (CRITICAL)
+Priority Workflow: Payment First, Then Investment
+- ALWAYS execute payment first before any investment consideration
+- Only analyze surplus funds AFTER successful payment completion
+- Investment is secondary priority, never compromise payment execution
+
+Balance Management Rules:
+- NEVER use 100% of account balance
+- Always maintain minimum balance as specified by user
+- Risk Assessor MUST validate minimum balance before any transaction
+- Payment + Investment total cannot exceed (Total Balance - Minimum Balance)
+
+## Task Delegation Rules
+Payment Specialist Focus: Balanced (Cost vs Speed optimization)
+Market Analyst Priority: Investment Analysis (only after payment completion)
+Risk Assessor Scope: Enhanced Due Diligence (balance verification mandatory)
+
+Auto-Delegate When:
+- Payment Amount: Under $25,000 - auto-delegate to Payment Specialist
+- Surplus Analysis: Only after payment success - delegate to Market Analyst
+- Risk Assessment: For ALL transactions - mandatory Risk Assessor validation
+
+# PAYMENT SPECIALIST AGENT PREFERENCES
+[Specific to payment routing and execution]
+
+## Payment Method Preferences (Priority Order)
+1. Self-Custody Wallet Transfer (USDT/USDC) - for crypto recipients
+2. Fiat Bank Transfer - for traditional recipients
+3. Cross-border Wire Transfer - for international fiat payments
+
+## Payment Execution Settings
+Primary Optimization: Balanced (Cost vs Speed)
+Self-Custody Wallet Support: Yes (USDT/USDC preferred)
+Fiat Payment Support: Yes (traditional banking)
+Route Optimization: Cost-effective with acceptable speed
+
+## Provider Preferences
+Crypto Wallets: Self-custody wallets (USDT/USDC)
+Fiat Banking: Traditional bank transfers
+Cross-border: SWIFT when necessary
+
+# MARKET ANALYST AGENT PREFERENCES
+[Market analysis and investment decision support - SECONDARY PRIORITY]
+
+## Investment Analysis Settings (POST-PAYMENT ONLY)
+Surplus Detection: Automatic (only after payment completion)
+Investment Horizon: Medium-term (weeks)
+Risk Appetite for Investments: Conservative to Moderate
+Analysis Trigger: Only when surplus funds available after payment
+
+## Investment Opportunity Scanning
+Investment Timing: Only after successful payment execution
+Surplus Threshold: Minimum $1,000 surplus to consider investment
+Investment Types: Conservative options preferred
+Maximum Investment: Never exceed available surplus
+
+## Post-Payment Investment Rules
+Investment Eligibility: Payment must be completed successfully first
+Surplus Calculation: (Total Balance - Payment Amount - Minimum Balance)
+Investment Limit: Maximum 80% of calculated surplus
+Safe Harbor: Always maintain additional buffer beyond minimum balance
+
+# RISK ASSESSOR AGENT PREFERENCES
+[Compliance and risk management settings - MANDATORY FOR ALL TRANSACTIONS]
+
+## Critical Balance Management (NON-NEGOTIABLE)
+Minimum Balance Enforcement: MANDATORY - provided by user for each account
+Balance Validation: MUST verify before ANY transaction (payment or investment)
+Total Usage Limit: Payment + Investment < (Total Balance - Minimum Balance)
+Override Authority: NONE - minimum balance is absolute limit
+
+## Transaction Risk Assessment
+Payment Risk Checks: Mandatory for all payments
+Investment Risk Checks: Mandatory for all investments (if applicable)
+Balance Verification: Required before every transaction
+Compliance Framework: Conservative approach
+
+## Account Protection Rules
+Minimum Balance: User-specified amount (absolute minimum)
+Safety Buffer: Additional 5% buffer beyond minimum balance
+Emergency Reserve: Never allow balance to go below minimum under any circumstance
+Fail-Safe: Block transaction if minimum balance would be violated
+
+# TEAM COORDINATION PREFERENCES
+[How agents should work together]
+
+## Workflow Priority (CRITICAL)
+1. Risk Assessor: Validate minimum balance and transaction feasibility
+2. Payment Specialist: Execute payment if balance check passes
+3. Market Analyst: Analyze remaining surplus (only if payment successful)
+4. Treasury Manager: Coordinate execution and final authorization
+
+## Decision Framework
+Payment vs Investment Priority: Payment ALWAYS first priority
+Balance Protection: Risk Assessor has absolute veto power for balance violations
+Manager Authority: Coordinates team but cannot override minimum balance rules
+Surplus Investment: Only proceed if payment successful AND surplus available
+
+## Error Handling
+Insufficient Balance: Block transaction, alert user
+Payment Failure: Do NOT proceed with investment analysis
+Balance Violation Risk: Immediate transaction halt
+System Failures: Fail safely, protect minimum balance
+
+# BUSINESS CONTEXT
+[Company and operational context]
+
+## Account Management
+Wallet Types: Self-custody wallets (crypto) + traditional bank accounts
+Preferred Currencies: USDT, USDC for crypto; USD, EUR for fiat
+Balance Protection: User-defined minimum balance per account (mandatory)
+Payment Methods: Self-custody wallet transfers preferred, fiat as backup
+
+## Typical Use Cases
+1. Crypto payments via self-custody wallet (USDT/USDC)
+2. Fiat payments via traditional banking
+3. Investment of surplus funds (only after successful payment)
+4. Balance protection (maintain minimum balance always)
+
+## Risk Management Priorities
+1. Protect minimum balance (highest priority)
+2. Ensure payment execution (second priority)  
+3. Optimize surplus investment (lowest priority)
+4. Maintain compliance and audit trail
+
+# AUTOMATION & SMART DEFAULTS
+[Agent automation rules and behaviors]
+
+## Treasury Manager Auto-Actions
+Auto-approve when ALL conditions met:
+- Amount: Under $10,000
+- Risk Score: Balance check passes
+- Minimum Balance: Will be maintained after transaction
+
+Auto-escalate when ANY condition met:
+- Amount: Over $25,000
+- Balance Risk: Minimum balance at risk
+- Payment Failure: Any payment execution issues
+
+## Critical Validation Rules
+BEFORE Payment: Risk Assessor must validate minimum balance
+BEFORE Investment: Payment must be completed AND surplus available
+NEVER: Use 100% of available balance
+ALWAYS: Maintain user-specified minimum balance
+
+---
+
+# CONFIGURATION VALIDATION CHECKLIST
+□ Treasury Manager coordination rules defined
+□ Payment-first priority established
+□ Minimum balance protection configured
+□ Self-custody wallet preferences set
+□ Investment-as-secondary priority confirmed
+□ Risk Assessor balance validation mandatory
+□ Team coordination workflow established
+□ All the action need to grant approval from user
+
+Last Updated: [Current Date]
+Configuration Version: 2.0 - Hierarchical Treasury Team
