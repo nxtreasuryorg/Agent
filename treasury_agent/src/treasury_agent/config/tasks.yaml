@@ -165,3 +165,55 @@ risk_assessment_task:
   agent: risk_assessor
   context:
     - treasury_coordination_task
+
+final_treasury_report_task:
+  description: >
+    Synthesize all specialist agent analyses into a comprehensive final treasury report for: {treasury_request}
+    
+    **MANAGER RESPONSIBILITY**: Gather and integrate all specialist team outputs into one master report
+    
+    1. **Executive Summary**: High-level overview of the complete treasury operation
+    2. **Team Coordination Review**: How the Treasury Manager coordinated specialist agents
+    3. **Risk Assessment Integration**: Incorporate Risk Assessor's balance validation and compliance results
+    4. **Payment Strategy Integration**: Incorporate Payment Specialist's routing analysis and execution proposal
+    5. **Investment Analysis Integration**: Incorporate Market Analyst's surplus detection and investment recommendations
+    6. **Final Decision Framework**: Treasury Manager's synthesis of all specialist inputs
+    7. **User Approval Summary**: Consolidate all approval requests from specialists into clear action items
+    8. **Implementation Plan**: Step-by-step execution plan based on team recommendations
+    
+    **Report Structure:**
+    - Executive Summary (Treasury Manager perspective)
+    - Risk Assessment Results (from Risk Assessor)
+    - Payment Execution Plan (from Payment Specialist) 
+    - Investment Opportunities (from Market Analyst)
+    - Manager's Final Recommendations
+    - Required User Approvals
+    - Next Steps and Implementation Timeline
+    
+    **Integration Requirements:**
+    - Reference specific outputs from each specialist agent
+    - Show how Treasury Manager weighed different specialist recommendations
+    - Present unified approval requests to user
+    - Demonstrate hierarchical decision-making process
+    
+  expected_output: >
+    Comprehensive final treasury report integrating all specialist analyses, including:
+    1. **EXECUTIVE SUMMARY**: Treasury Manager's overview of complete operation
+    2. **RISK ASSESSMENT SUMMARY**: Key findings from Risk Assessor with balance validation
+    3. **PAYMENT STRATEGY SUMMARY**: Payment Specialist's recommendations and approval requests
+    4. **INVESTMENT ANALYSIS SUMMARY**: Market Analyst's surplus and investment proposals
+    5. **MANAGER'S SYNTHESIS**: How Treasury Manager evaluated and integrated all inputs
+    6. **CONSOLIDATED USER APPROVALS**: All approval requests organized by priority
+    7. **IMPLEMENTATION ROADMAP**: Clear step-by-step execution plan
+    8. **RISK MITIGATION**: How the team addressed balance protection and compliance
+    
+    The report must demonstrate effective hierarchical coordination and present a unified
+    treasury operation plan based on specialist team collaboration.
+    
+  agent: treasury_manager
+  context:
+    - treasury_coordination_task
+    - payment_processing_task
+    - market_analysis_task
+    - risk_assessment_task
+  output_file: output/final_treasury_report.md

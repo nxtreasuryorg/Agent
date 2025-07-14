@@ -109,6 +109,14 @@ class TreasuryAgent():
             output_file='output/risk_assessment.md'
         )
 
+    # Final Treasury Report Task - Manager synthesizes all specialist work
+    @task
+    def final_treasury_report_task(self) -> Task:
+        return Task(
+            config=self.tasks_config['final_treasury_report_task'], # type: ignore[index]
+            output_file='output/final_treasury_report.md'
+        )
+
     @crew
     def crew(self) -> Crew:
         """Creates the Hierarchical Treasury Team crew"""
