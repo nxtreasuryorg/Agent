@@ -16,10 +16,6 @@ treasury_manager:
     surplus investment opportunities, while strictly protecting minimum account balances.
     You have access to analysis tools to understand data and distribute work correctly to specialists.
     You require user approval for all major actions as specified in preferences.
-  tools:
-    - mock_market_data
-    - mock_risk_assessment
-    - mock_audit_logger
   allow_delegation: true
   verbose: true
 
@@ -38,9 +34,6 @@ payment_specialist:
     user approval. Your expertise includes payment optimization analysis, route evaluation, 
     and creating comprehensive execution proposals with risk assessments and cost breakdowns.
     You always seek user approval before taking any payment actions.
-  tools:
-    - mock_payment_processor
-    - mock_audit_logger
   allow_delegation: false
   verbose: true
 
@@ -60,9 +53,6 @@ market_analyst:
     and creating comprehensive investment recommendations with clear rationale and expected 
     outcomes. You only analyze investments AFTER payment completion and always seek user 
     approval before taking any investment actions.
-  tools:
-    - mock_market_data
-    - mock_audit_logger
   allow_delegation: false
   verbose: true
 
@@ -81,8 +71,5 @@ risk_assessor:
     have absolute authority to block transactions that risk minimum balance violations. 
     You perform mandatory validation for ALL transactions and maintain comprehensive 
     audit trails for compliance purposes.
-  tools:
-    - mock_risk_assessment
-    - mock_audit_logger
   allow_delegation: false
   verbose: true

@@ -24,11 +24,9 @@ class MockAuditLoggerTool(BaseTool):
         "Supports transaction logging, decision tracking, compliance checks, and log retrieval."
     )
     args_schema: Type[BaseModel] = AuditLoggerInput
-
-    def __init__(self):
-        super().__init__()
-        # Mock in-memory storage for testing (in real implementation, this would be a database)
-        self.audit_logs = []
+    
+    # Mock in-memory storage for testing (in real implementation, this would be a database)
+    _audit_logs = []
 
     def _run(self, action: str, event_type: str, details: str, 
              transaction_id: str = "", user_id: str = "system", severity: str = "info") -> str:
@@ -54,7 +52,7 @@ class MockAuditLoggerTool(BaseTool):
         log_entry["compliance_required"] = True
         log_entry["retention_period"] = "7_years"  # Financial records retention
         
-        self.audit_logs.append(log_entry)
+        self._audit_logs.append(log_entry)
         
         result = f"✅ Transaction Audit Log Created:\n"
         result += f"Log ID: {log_entry['log_id']}\n"
@@ -81,7 +79,7 @@ class MockAuditLoggerTool(BaseTool):
         log_entry["decision_maker"] = user_id
         log_entry["requires_justification"] = severity in ["warning", "error", "critical"]
         
-        self.audit_logs.append(log_entry)
+        self._audit_logs.append(log_entry)
         
         result = f"🧠 Decision Audit Log Created:\n"
         result += f"Log ID: {log_entry['log_id']}\n"
@@ -105,7 +103,7 @@ class MockAuditLoggerTool(BaseTool):
         log_entry["regulatory_framework"] = "AML/KYC/OFAC"
         log_entry["compliance_officer_review"] = severity in ["error", "critical"]
         
-        self.audit_logs.append(log_entry)
+        self._audit_logs.append(log_entry)
         
         result = f"⚖️  Compliance Audit Log Created:\n"
         result += f"Log ID: {log_entry['log_id']}\n"
@@ -121,7 +119,7 @@ class MockAuditLoggerTool(BaseTool):
 
     def _retrieve_logs(self, transaction_id: str = "", event_type: str = "") -> str:
         
-        filtered_logs = self.audit_logs.copy()
+        filtered_logs = self._audit_logs.copy()
         
         if transaction_id:
             filtered_logs = [log for log in filtered_logs if log.get("transaction_id") == transaction_id]

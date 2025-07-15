@@ -25,10 +25,9 @@ from treasury_agent.crew import TreasuryAgent
 def main():
     print("🚀 Starting Treasury Agent...")
     
-    # Input parameters
+    # Treasury request parameters
     inputs = {
-        'topic': 'AI LLMs',
-        'current_year': '2025'
+        'treasury_request': 'Send $5,000 USD to Alice in France for services, current account balance is $25,000, minimum balance requirement is $5,000'
     }
     
     try:
