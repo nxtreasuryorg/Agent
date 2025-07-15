@@ -254,9 +254,132 @@ Treasury Manager: "Based on team analysis, proceeding with SWIFT wire transfer.
 
 ## Phase 2: Real Tool Integration
 
-### Step 5: Real Market Data Integration
+### **Future Tool Architecture Overview**
 
-#### Step 5.1: Replace Mock Market Data Tool
+Based on the current mock tool implementation and future requirements, the system will evolve to include these **5 core tool categories**:
+
+#### **1. Analysis Tools (Data Processing & Intelligence)**
+**Purpose**: Read and analyze data from databases and uploaded Excel files
+**Capabilities**:
+- Database connectivity and query execution
+- Excel file parsing and data extraction
+- Data validation and quality assessment
+- Historical transaction analysis
+- User preference and pattern recognition
+- Surplus calculation and availability assessment
+
+**Integration Points**:
+- Used by all specialist agents for data-driven decisions
+- Provides foundation for payment and investment analysis
+- Supports Risk Assessor with historical data for compliance
+
+#### **2. Payment Tools (Self-Custody Wallet Execution)**
+**Purpose**: Execute payments based on analysis results using self-custody wallets
+**Capabilities**:
+- Self-custody wallet management (USDT/USDC)
+- Multi-chain payment execution
+- Payment route optimization
+- Transaction status monitoring
+- Fee calculation and optimization
+- Backup payment methods (fiat transfers)
+
+**Integration Points**:
+- Primary tool for Payment Specialist
+- Receives analysis results from Analysis Tools
+- Provides execution status to Investment Tools
+- Integrates with Risk Tools for balance validation
+
+#### **3. Investment Tools (Recommendation & Execution)**
+**Purpose**: Make investment recommendations and execute based on remaining balance
+**Capabilities**:
+- Investment opportunity analysis
+- Portfolio management and rebalancing
+- Yield optimization algorithms
+- Investment execution across platforms
+- Performance tracking and reporting
+- Risk-adjusted return calculations
+
+**Integration Points**:
+- Uses analysis results from Analysis Tools
+- Receives remaining balance data from Payment Tools
+- Integrates with Real-time Market Data Tools
+- Coordinates with Risk Tools for investment limits
+
+#### **4. Risk Tools (Balance & Compliance Management)**
+**Purpose**: Check balance requirements and ensure compliance across all operations
+**Capabilities**:
+- Real-time balance verification
+- Minimum balance enforcement
+- Transaction limit validation
+- Compliance checking (AML/KYC/OFAC)
+- Risk scoring and assessment
+- Regulatory reporting
+
+**Integration Points**:
+- Used by all specialist agents for validation
+- Provides balance data to Analysis Tools
+- Validates Payment Tools execution
+- Monitors Investment Tools allocations
+
+#### **5. Real-time Market Data Tools (MCP Server)**
+**Purpose**: Provide live market data for investment decisions and payment optimization
+**Capabilities**:
+- Real-time exchange rates (fiat and crypto)
+- Market volatility and trend analysis
+- Yield opportunity monitoring
+- Price feed aggregation
+- Market condition alerts
+- Historical data analysis
+
+**Integration Points**:
+- Primary data source for Investment Tools
+- Supports Payment Tools with rate optimization
+- Provides market context to Analysis Tools
+- Enables Risk Tools with market-based risk factors
+
+### **Tool Integration Workflow**
+
+```
+Analysis Tools → Payment Tools → Investment Tools
+     ↓              ↓              ↓
+Risk Tools ←→ Real-time Market Data Tools
+```
+
+**Data Flow**:
+1. **Analysis Tools** process user data and calculate available funds
+2. **Risk Tools** validate balance requirements and compliance
+3. **Payment Tools** execute payments using self-custody wallets
+4. **Real-time Market Data Tools** provide current market conditions
+5. **Investment Tools** recommend and execute surplus investments
+6. **Risk Tools** monitor all operations for compliance
+
+### Step 5: Analysis Tools Implementation
+
+#### Step 5.1: Database and Excel Data Analysis Tools
+**What to Build:**
+- Database connectivity layer for user data access
+- Excel file parsing and data extraction capabilities
+- Data validation and quality assessment algorithms
+- Historical transaction analysis and pattern recognition
+- Surplus calculation and availability assessment
+- User preference and behavior analysis
+
+**Implementation Strategy:**
+1. Build Analysis Tools with database and Excel file support
+2. Replace mock data sources with real data analysis capabilities
+3. Test all specialist agents with real data analysis
+4. Ensure Treasury Manager can coordinate with real data insights
+5. Add data quality validation and error handling
+
+**Integration Steps:**
+1. Build Analysis Tools with database/Excel connectivity
+2. Replace mock data tools with real analysis capabilities
+3. Test specialist agents with real data analysis and Treasury Manager coordination
+4. Performance optimization and error handling across team
+
+### Step 6: Real-time Market Data Tools (MCP Server)
+
+#### Step 6.1: Replace Mock Market Data Tool
 **What to Build:**
 - Real exchange rate APIs (fiat and crypto)
 - Live volatility monitoring
@@ -289,14 +412,17 @@ Treasury Manager: "Based on team analysis, proceeding with SWIFT wire transfer.
 - Treasury Manager coordinates dynamic cost estimates that update with market changes
 - Better timing recommendations through specialist collaboration
 
-### Step 6: Real Risk Assessment Tool
+### Step 7: Risk Tools Implementation
 
-#### Step 6.1: Replace Mock Risk Assessment
+#### Step 7.1: Replace Mock Risk Assessment with Real Risk Tools
 **What to Build:**
-- Real compliance checking against regulatory rules
-- Live account balance verification
-- Dynamic transaction limit enforcement
-- Actual sanctions screening
+- Real-time balance verification across all user accounts
+- Minimum balance enforcement and validation
+- Transaction limit validation and enforcement
+- Real compliance checking against regulatory rules (AML/KYC/OFAC)
+- Actual sanctions screening and watchlist checking
+- Risk scoring and assessment algorithms
+- Regulatory reporting and audit trail generation
 
 **Implementation Strategy:**
 1. Build real Risk Assessment Tool with compliance APIs
@@ -324,14 +450,17 @@ Treasury Manager: "Based on team analysis, proceeding with SWIFT wire transfer.
 - Treasury Manager ensures automatic regulatory violation prevention
 - Payment Specialist receives risk-cleared transactions for execution
 
-### Step 7: Real Payment Processor Tool
+### Step 8: Payment Tools Implementation (Self-Custody Wallet)
 
-#### Step 7.1: Replace Mock Payment Processor
+#### Step 8.1: Replace Mock Payment Processor with Real Payment Tools
 **What to Build:**
-- Real payment provider integrations
-- Actual payment execution capabilities
+- Self-custody wallet management (USDT/USDC)
+- Multi-chain payment execution capabilities
+- Real payment provider integrations for backup fiat transfers
 - Live payment routing and optimization
-- Real-time payment status tracking
+- Real-time payment status tracking and monitoring
+- Fee calculation and optimization algorithms
+- Transaction retry logic and error handling
 
 **Implementation Strategy:**
 1. Build real Payment Processor Tool with provider APIs
@@ -359,14 +488,15 @@ Treasury Manager: "Based on team analysis, proceeding with SWIFT wire transfer.
 - Intelligent routing decisions through collaboration between Payment Specialist and Market Analyst
 - Treasury Manager coordinates retry logic and failure handling across the team
 
-### Step 8: Real Audit Logger & End-to-End Testing
+### Step 10: Enhanced Audit & Compliance Tools
 
-#### Step 8.1: Replace Mock Audit Logger
+#### Step 10.1: Replace Mock Audit Logger with Real Audit Tools
 **What to Build:**
-- Real audit logging with persistent storage
-- Compliance-grade logging and tracking
-- Immutable audit trail generation
-- Real-time audit data processing
+- Real audit logging with persistent database storage
+- Compliance-grade logging and tracking for all tool interactions
+- Immutable audit trail generation for regulatory requirements
+- Real-time audit data processing and reporting
+- Integration with all 5 tool categories for comprehensive logging
 
 **Implementation Strategy:**
 1. Build real Audit Logger Tool with database persistence
@@ -381,37 +511,40 @@ Treasury Manager: "Based on team analysis, proceeding with SWIFT wire transfer.
 3. Test complete audit trail functionality
 4. Compliance validation and reporting
 
-#### Step 8.2: Complete Payment System Testing
+#### Step 10.2: Complete Tool Integration Testing
 **What to Build:**
-- End-to-end payment workflow testing with all real tools
-- Comprehensive error scenario testing
-- Performance benchmarking under load
-- Agent decision quality validation
+- End-to-end workflow testing with all 5 real tool categories
+- Comprehensive error scenario testing across all tools
+- Performance benchmarking under load with real data
+- Agent decision quality validation with integrated tools
 
 **Testing Focus:**
-- Treasury Manager coordinates team to make optimal decisions with real data
-- All tools integrate seamlessly across specialist agents
-- Error handling works across the entire team and system
+- Treasury Manager coordinates team to make optimal decisions with real data from all tools
+- All 5 tool categories integrate seamlessly across specialist agents
+- Error handling works across the entire team and tool ecosystem
 - Performance meets production requirements with proper coordination overhead
+- Analysis Tools provide accurate data to Payment and Investment Tools
+- Risk Tools validate all operations across the entire workflow
 
 ---
 
-## Phase 3: Investment Layer
+## Phase 3: Advanced Tool Integration & Optimization
 
-### Step 9: Surplus Detection System
+### Step 11: Advanced Analysis Tools Integration
 
-#### Step 9.1: Surplus Identification
-**What to Build (Post-Payment):**
-- Remaining balance calculation
-- Investment eligibility checking
-- Risk tolerance assessment
-- Investment amount optimization
+#### Step 11.1: Enhanced Data Analysis Capabilities
+**What to Build:**
+- Advanced database analytics and reporting
+- Machine learning for pattern recognition and prediction
+- Real-time data processing and streaming analytics
+- Advanced Excel file processing with complex data structures
+- Predictive analytics for payment and investment optimization
 
 **Implementation Focus:**
-1. **Post-Payment Analysis**: Calculate remaining funds after payment completion
-2. **Eligibility Checking**: User risk tolerance, minimum investment amounts
-3. **Opportunity Assessment**: Available investment options analysis
-4. **Amount Optimization**: Determine optimal investment allocation
+1. **Advanced Analytics**: Machine learning models for decision optimization
+2. **Real-time Processing**: Stream processing for live data analysis
+3. **Predictive Modeling**: Forecast payment needs and investment opportunities
+4. **Data Quality**: Advanced validation and data cleansing algorithms
 
 #### Step 9.2: Investment Opportunity Scanner
 **What to Build:**
@@ -426,27 +559,30 @@ Treasury Manager: "Based on team analysis, proceeding with SWIFT wire transfer.
 3. **Established Staking**: ETH 2.0, major protocols
 4. **DeFi Conservative**: Only after extensive testing
 
-### Step 10: Investment Tools Development
+### Step 9: Investment Tools Implementation
 
-#### Step 10.1: Investment MCP Tools
+#### Step 9.1: Investment Recommendation and Execution Tools
 **What to Build:**
-- Investment platform connectors
-- Portfolio balance checkers
-- Yield calculation tools
-- Investment execution tools
+- Investment opportunity analysis and recommendation engine
+- Portfolio management and rebalancing algorithms
+- Yield optimization and risk-adjusted return calculations
+- Investment execution across multiple platforms
+- Performance tracking and reporting systems
+- Surplus fund allocation and management
 
 **Tool Priority Order:**
-1. **Portfolio Scanner**: Check current investment positions
-2. **Yield Calculator**: Calculate expected returns
-3. **Risk Assessor**: Investment-specific risk analysis
-4. **Investment Executor**: Place investment orders
+1. **Investment Analyzer**: Analyze opportunities based on remaining balance
+2. **Portfolio Manager**: Manage and rebalance investment positions
+3. **Yield Optimizer**: Calculate optimal yields and risk-adjusted returns
+4. **Investment Executor**: Execute investments across platforms
+5. **Performance Tracker**: Monitor and report investment performance
 
-#### Step 10.2: Investment Risk Management
+#### Step 9.2: Investment Risk Management
 **What to Build:**
-- Investment risk scoring
-- Portfolio diversification checking
-- Loss limit enforcement
-- Investment monitoring
+- Investment risk scoring and assessment
+- Portfolio diversification checking and optimization
+- Loss limit enforcement and monitoring
+- Investment performance tracking and alerts
 
 ### Step 11: Investment Agent Logic
 
@@ -704,7 +840,33 @@ Treasury Manager: "Based on team analysis, proceeding with SWIFT wire transfer.
 - [ ] Performance under load validated for coordinated team operations
 - [ ] Disaster recovery tested for multi-agent failure scenarios
 
-This technical implementation guide ensures a systematic approach to building the Hierarchical Treasury Team Architecture, prioritizing payment functionality while maintaining the flexibility to add sophisticated investment features once the foundation is solid. 
+This technical implementation guide ensures a systematic approach to building the Hierarchical Treasury Team Architecture with **5 core tool categories**:
+
+## 🎯 **Updated Tool Architecture Summary**
+
+### **Phase 1: Foundation (Current - Complete)**
+- ✅ Hierarchical Treasury Team with mock tools
+- ✅ Agent coordination and user approval workflow
+- ✅ Basic treasury operations and decision-making
+
+### **Phase 2: Real Tool Integration (Next Steps)**
+1. **Analysis Tools**: Database and Excel data processing
+2. **Real-time Market Data Tools**: MCP server for live market data
+3. **Risk Tools**: Balance verification and compliance management
+4. **Payment Tools**: Self-custody wallet execution
+5. **Investment Tools**: Recommendation and execution based on remaining balance
+
+### **Phase 3: Advanced Integration**
+- Advanced analytics and machine learning
+- Predictive modeling and optimization
+- Enhanced tool coordination and automation
+
+### **Phase 4: Production Readiness**
+- Security hardening and compliance automation
+- Monitoring, observability, and user interface
+- Production deployment and optimization
+
+The system prioritizes payment functionality while maintaining the flexibility to add sophisticated investment features once the foundation is solid, with all operations requiring user approval before execution. 
 
 ---
 
