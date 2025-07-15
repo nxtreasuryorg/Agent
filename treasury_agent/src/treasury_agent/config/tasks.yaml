@@ -75,7 +75,7 @@ payment_processing_task:
     6. Backup options if primary method fails
     7. **USER ACTION REQUIRED**: Explicit request for go/no-go decision
     
-  agent: payment_specialist
+  # No specific agent - let Treasury Manager delegate in hierarchical process
   context:
     - treasury_coordination_task
 
@@ -119,7 +119,7 @@ market_analysis_task:
     
     Only provide investment proposal if payment is successful and surplus is available.
     
-  agent: market_analyst
+  # No specific agent - let Treasury Manager delegate in hierarchical process
   context:
     - treasury_coordination_task
     - payment_processing_task
@@ -162,39 +162,34 @@ risk_assessment_task:
     
     Must explicitly state whether minimum balance requirements will be maintained.
     
-  agent: risk_assessor
+  # No specific agent - let Treasury Manager delegate in hierarchical process
   context:
     - treasury_coordination_task
 
 final_treasury_report_task:
   description: >
-    Synthesize all specialist agent analyses into a comprehensive final treasury report for: {treasury_request}
+    Create comprehensive final treasury report synthesizing all completed specialist analyses for: {treasury_request}
     
-    **MANAGER RESPONSIBILITY**: Gather and integrate all specialist team outputs into one master report
+    **INTEGRATION APPROACH**: Use the completed outputs from previous tasks to create master report
     
-    1. **Executive Summary**: High-level overview of the complete treasury operation
-    2. **Team Coordination Review**: How the Treasury Manager coordinated specialist agents
-    3. **Risk Assessment Integration**: Incorporate Risk Assessor's balance validation and compliance results
-    4. **Payment Strategy Integration**: Incorporate Payment Specialist's routing analysis and execution proposal
-    5. **Investment Analysis Integration**: Incorporate Market Analyst's surplus detection and investment recommendations
-    6. **Final Decision Framework**: Treasury Manager's synthesis of all specialist inputs
-    7. **User Approval Summary**: Consolidate all approval requests from specialists into clear action items
-    8. **Implementation Plan**: Step-by-step execution plan based on team recommendations
+    Based on the completed specialist work from the team coordination, payment processing, market analysis, 
+    and risk assessment tasks, compile a comprehensive final report that includes:
     
-    **Report Structure:**
-    - Executive Summary (Treasury Manager perspective)
-    - Risk Assessment Results (from Risk Assessor)
-    - Payment Execution Plan (from Payment Specialist) 
-    - Investment Opportunities (from Market Analyst)
-    - Manager's Final Recommendations
-    - Required User Approvals
-    - Next Steps and Implementation Timeline
+    1. **Executive Summary**: Treasury Manager's overview of the complete treasury operation
+    2. **Risk Assessment Summary**: Integrate the completed risk validation and compliance results 
+    3. **Payment Strategy Summary**: Incorporate the payment routing analysis and execution results
+    4. **Market Analysis Summary**: Include the market conditions and surplus detection findings
+    5. **Team Coordination Summary**: Document how specialists collaborated effectively
+    6. **Final Recommendations**: Treasury Manager's synthesis of all specialist inputs
+    7. **User Approval Consolidation**: Organize all approval requests by priority
+    8. **Implementation Roadmap**: Step-by-step execution plan
     
-    **Integration Requirements:**
-    - Reference specific outputs from each specialist agent
-    - Show how Treasury Manager weighed different specialist recommendations
-    - Present unified approval requests to user
-    - Demonstrate hierarchical decision-making process
+    **Key Integration Points:**
+    - Synthesize results from all previously completed specialist tasks
+    - Demonstrate effective hierarchical team coordination
+    - Present unified treasury operation recommendations
+    - Show balance protection and compliance adherence
+    - Consolidate all user approval requirements into clear action items
     
   expected_output: >
     Comprehensive final treasury report integrating all specialist analyses, including:

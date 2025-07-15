@@ -31,8 +31,8 @@ class TreasuryAgent():
         # Create LLM instance for the manager using CrewAI's LLM class
         manager_llm = LLM(
             model="bedrock/amazon.nova-micro-v1:0",
-            temperature=0.1,
-            max_tokens=1000
+            temperature=0.3,
+            max_tokens=2000
         )
         
         return Agent(
@@ -48,8 +48,8 @@ class TreasuryAgent():
         # Create LLM instance for the payment specialist using CrewAI's LLM class
         specialist_llm = LLM(
             model="bedrock/amazon.nova-micro-v1:0",
-            temperature=0.1,
-            max_tokens=1000
+            temperature=0.3,
+            max_tokens=2000
         )
         
         return Agent(
@@ -69,8 +69,8 @@ class TreasuryAgent():
         # Create LLM instance for the market analyst using CrewAI's LLM class
         analyst_llm = LLM(
             model="bedrock/amazon.nova-micro-v1:0",
-            temperature=0.1,
-            max_tokens=1000
+            temperature=0.3,
+            max_tokens=2000
         )
         
         return Agent(
@@ -89,8 +89,8 @@ class TreasuryAgent():
         # Create LLM instance for the risk assessor using CrewAI's LLM class
         assessor_llm = LLM(
             model="bedrock/amazon.nova-micro-v1:0",
-            temperature=0.1,
-            max_tokens=1000
+            temperature=0.3,
+            max_tokens=2000
         )
         
         return Agent(
@@ -157,8 +157,8 @@ class TreasuryAgent():
         # Create the LLM instance for the manager using CrewAI's LLM class
         manager_llm = LLM(
             model="bedrock/amazon.nova-micro-v1:0",
-            temperature=0.1,
-            max_tokens=1000
+            temperature=0.3,  # Slightly higher for better reasoning
+            max_tokens=2000   # More tokens for complex coordination tasks
         )
 
         return Crew(
