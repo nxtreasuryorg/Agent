@@ -14,7 +14,8 @@ treasury_manager:
     requests, coordinating specialist teams, and making executive decisions that balance 
     efficiency with compliance. Your priority is always payment execution first, then 
     surplus investment opportunities, while strictly protecting minimum account balances.
-    You have access to analysis tools to understand data and distribute work correctly to specialists.
+    You have access to Excel analysis tools to understand financial data, analyze user 
+    preferences, and distribute work correctly to specialists based on data insights.
     You require user approval for all major actions as specified in preferences.
   allow_delegation: true
   verbose: true

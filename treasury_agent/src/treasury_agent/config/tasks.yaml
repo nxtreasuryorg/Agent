@@ -8,11 +8,13 @@ treasury_coordination_task:
     As Treasury Manager, analyze the request and coordinate your specialist team:
     
     1. **Request Analysis**: Understand the payment requirements, amounts, recipients, and any investment preferences
-    2. **Team Coordination**: Delegate appropriate tasks to specialist agents based on their expertise
-    3. **Priority Management**: Ensure payment processing takes absolute priority over investment analysis
-    4. **Risk Oversight**: Ensure Risk Assessor validates minimum balance requirements before ANY transaction
-    5. **Final Authorization**: Review all specialist recommendations and make executive decisions
-    6. **User Approval**: Present final recommendations to user for approval before execution
+    2. **Data Analysis**: If Excel files are available, analyze financial data to understand user patterns, 
+       available funds, and historical transaction data to inform decision-making
+    3. **Team Coordination**: Delegate appropriate tasks to specialist agents based on their expertise
+    4. **Priority Management**: Ensure payment processing takes absolute priority over investment analysis
+    5. **Risk Oversight**: Ensure Risk Assessor validates minimum balance requirements before ANY transaction
+    6. **Final Authorization**: Review all specialist recommendations and make executive decisions
+    7. **User Approval**: Present final recommendations to user for approval before execution
     
     **Critical Workflow:**
     - Risk Assessor: MUST validate minimum balance before proceeding
@@ -28,11 +30,12 @@ treasury_coordination_task:
     
   expected_output: >
     A comprehensive treasury operation plan that includes:
-    1. Risk assessment results with balance validation
-    2. Payment execution strategy and routing recommendations  
-    3. Surplus fund analysis and investment opportunities (if applicable)
-    4. Final recommendations requiring user approval
-    5. Complete audit trail of all decisions and validations
+    1. Data analysis results from Excel files (if available)
+    2. Risk assessment results with balance validation
+    3. Payment execution strategy and routing recommendations  
+    4. Surplus fund analysis and investment opportunities (if applicable)
+    5. Final recommendations requiring user approval
+    6. Complete audit trail of all decisions and validations
     
     The output must prioritize payment execution while strictly protecting minimum balances
     and present all recommendations to the user for final approval.

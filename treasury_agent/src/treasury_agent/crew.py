@@ -9,6 +9,7 @@ from treasury_agent.tools.mock_market_data import MockMarketDataTool
 from treasury_agent.tools.mock_risk_assessment import MockRiskAssessmentTool
 from treasury_agent.tools.mock_payment_processor import MockPaymentProcessorTool
 from treasury_agent.tools.mock_audit_logger import MockAuditLoggerTool
+from treasury_agent.tools.excel_analysis_tool import ExcelAnalysisTool
 
 # If you want to run a snippet of code before or after the crew starts,
 # you can use the @before_kickoff and @after_kickoff decorators
@@ -57,6 +58,7 @@ class TreasuryAgent():
             tools=[
                 MockPaymentProcessorTool(),
                 MockMarketDataTool(), # Payment specialist needs market data for routing optimization
+                ExcelAnalysisTool(), # Payment specialist needs Excel analysis for financial data insights
                 MockAuditLoggerTool()
             ],
             llm=specialist_llm,
@@ -98,6 +100,7 @@ class TreasuryAgent():
             tools=[
                 MockRiskAssessmentTool(),
                 MockMarketDataTool(), # Risk assessor needs market data for risk evaluation
+                ExcelAnalysisTool(), # Risk assessor needs Excel analysis for financial data validation
                 MockAuditLoggerTool()
             ],
             llm=assessor_llm,
