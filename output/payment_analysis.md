@@ -1,54 +1,41 @@
-The following payment execution proposal requires user approval:
+```
 
-**APPROVAL REQUEST**:
+**Payment Execution Proposal for Sending $5,000 USD to Alice in France**
+
+**Primary Method: Cryptocurrency (USDT/USDC)**
+- **Execution Timeline:** 5-30 minutes
+- **Cost:** $35.00
+- **Technical Steps:**
+  1. Ensure Alice has a verified USDT/USDC wallet.
+  2. Initiate the transfer from the self-custody wallet to Alice's wallet.
+  3. Confirm the transaction on the blockchain.
+- **Risk Considerations:**
+  - Regulatory uncertainty around cryptocurrency transactions.
+  - Potential for wallet security risks.
+- **Balance Impact Assessment:**
+  - Current Account Balance: $25,000 USD
+  - Payment Amount: $5,000 USD
+  - Minimum Balance Requirement: $5,000 USD
+  - Remaining Balance Post-Payment: $20,000 USD
+
+**Backup Method: SWIFT Wire Transfer**
+- **Execution Timeline:** 1-3 business days
+- **Cost:** $100.00
+- **Technical Steps:**
+  1. Fill out the SWIFT wire transfer form.
+  2. Submit the form to the bank.
+  3. Confirm the transfer with the bank.
+- **Risk Considerations:**
+  - Higher fees.
+  - Longer processing time.
+- **Balance Impact Assessment:**
+  - Current Account Balance: $25,000 USD
+  - Payment Amount: $5,000 USD
+  - Minimum Balance Requirement: $5,000 USD
+  - Remaining Balance Post-Payment: $20,000 USD
+
+**APPROVAL REQUEST:**
 REQUESTING USER APPROVAL for payment execution.
 
-**Optimal Payment Method and Routing Strategy**:
-- **Primary Method**: Self-custody wallet (USDT/USDC)
-  - **Method**: Cryptocurrency Transfer
-  - **Amount**: $5,000 USD
-  - **Fee**: $35.00
-  - **Time**: 5-30 minutes
-  - **Recipient**: Alice (Crypto Wallet Address)
-  - **Execution Plan**:
-    - Convert $5,000 USD to USDT/USDC.
-    - Transfer USDT/USDC to Alice's crypto wallet.
-    - Confirm receipt in Alice's wallet.
-
-- **Backup Method**: SEPA Transfer
-  - **Method**: Fiat Transfer
-  - **Amount**: $5,000 USD
-  - **Fee**: $12.00
-  - **Time**: 1 business day
-  - **Recipient**: Alice (Bank Account)
-  - **Execution Plan**:
-    - Initiate SEPA transfer.
-    - Confirm receipt in Alice's bank account.
-
-**Complete Cost Breakdown and Execution Timeline**:
-- **Primary Method**:
-  - Amount: $5,000 USD
-  - Fee: $35.00
-  - Total Cost: $5,035.00
-  - Execution Time: 5-30 minutes
-- **Backup Method**:
-  - Amount: $5,000 USD
-  - Fee: $12.00
-  - Total Cost: $5,012.00
-  - Execution Time: 1 business day
-
-**Technical Implementation Steps for Chosen Method**:
-1. Convert $5,000 USD to USDT/USDC.
-2. Transfer USDT/USDC to Alice's crypto wallet.
-3. Confirm receipt in Alice's wallet.
-
-**Risk Considerations and Balance Impact Assessment**:
-- The current account balance is $25,000, which meets the minimum balance requirement of $5,000.
-- The balance will be reduced to $20,000 after the payment.
-- The Risk Assessor has validated that the balance is sufficient before proceeding with any transaction.
-
-**Backup Options if Primary Method Fails**:
-- If the primary method fails, the SEPA transfer will be executed as a backup.
-
-**USER ACTION REQUIRED**:
-Please provide explicit go/no-go decision for the proposed payment execution.
+**USER ACTION REQUIRED:**
+Please provide a go/no-go decision on the proposed payment execution plan.
