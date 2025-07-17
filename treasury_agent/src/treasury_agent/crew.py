@@ -11,6 +11,7 @@ from treasury_agent.tools.mock_payment_processor import MockPaymentProcessorTool
 from treasury_agent.tools.mock_audit_logger import MockAuditLoggerTool
 from treasury_agent.tools.excel_analysis_tool import ExcelAnalysisTool
 from treasury_agent.tools.treasury_usdt_payment_tool import TreasuryUSDTPaymentTool
+from treasury_agent.tools.treasury_risk_tools import TreasuryRiskTools
 
 # If you want to run a snippet of code before or after the crew starts,
 # you can use the @before_kickoff and @after_kickoff decorators
@@ -100,7 +101,7 @@ class TreasuryAgent():
         return Agent(
             config=self.agents_config['risk_assessor'], # type: ignore[index]
             tools=[
-                MockRiskAssessmentTool(),
+                TreasuryRiskTools(), # Real risk tools for balance and limit validation
                 MockMarketDataTool(), # Risk assessor needs market data for risk evaluation
                 ExcelAnalysisTool(), # Risk assessor needs Excel analysis for financial data validation
                 MockAuditLoggerTool()
