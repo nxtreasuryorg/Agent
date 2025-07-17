@@ -23,11 +23,11 @@ if env_file.exists():
 from treasury_agent.crew import TreasuryAgent
 
 def main():
-    print("🚀 Starting Treasury Agent with Excel Analysis Tool...")
+    print("🚀 Starting Treasury Agent with Simplified Test...")
     
-    # Treasury request parameters with Excel file reference
+    # Simple test request to isolate the issue
     inputs = {
-        'treasury_request': 'Send $5,000 USD to Alice in France for services. Current account balance is $25,000, minimum balance requirement is $5,000. Please analyze the financial records in data/financial_records.xlsx to understand our payment patterns and available funds before making recommendations.'
+        'treasury_request': 'Send $1,000 USD to Bob. Current balance is $10,000, minimum balance is $2,000.'
     }
     
     try:

@@ -80,6 +80,7 @@ class TreasuryAgent():
             config=self.agents_config['market_analyst'], # type: ignore[index]
             tools=[
                 MockMarketDataTool(),
+                ExcelAnalysisTool(), # Market Analyst needs Excel analysis for financial data insights
                 MockAuditLoggerTool()
             ],
             llm=analyst_llm,
