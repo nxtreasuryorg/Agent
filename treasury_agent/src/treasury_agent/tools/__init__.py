@@ -4,6 +4,7 @@ from .mock_payment_processor import MockPaymentProcessorTool
 from .mock_audit_logger import MockAuditLoggerTool
 from .custom_tool import MyCustomTool
 from .excel_analysis_tool import ExcelAnalysisTool
+from .treasury_usdt_payment_tool import TreasuryUSDTPaymentTool
 
 __all__ = [
     'MockMarketDataTool',
@@ -11,5 +12,6 @@ __all__ = [
     'MockPaymentProcessorTool',
     'MockAuditLoggerTool',
     'MyCustomTool',
-    'ExcelAnalysisTool'
+    'ExcelAnalysisTool',
+    'TreasuryUSDTPaymentTool'
 ]

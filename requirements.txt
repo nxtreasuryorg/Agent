@@ -22,7 +22,10 @@ python-dotenv>=1.0.0
 # Optional: For enhanced logging and monitoring
 colorlog>=6.7.0
 
+# Phase 2: USDT Payment Tools
+web3>=6.0.0
+requests>=2.25.0
+
 # Note: Additional dependencies will be added in later phases:
-# Phase 2: Real tool integrations (requests, httpx, etc.)
 # Phase 3: Investment tools (pandas, numpy, etc.)  
 # Phase 4: Production (gunicorn, prometheus-client, etc.) 
