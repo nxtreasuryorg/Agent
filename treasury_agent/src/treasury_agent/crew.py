@@ -4,11 +4,11 @@ from crewai.agents.agent_builder.base_agent import BaseAgent
 from typing import List
 import os
 
-# Import the mock tools for treasury agents
-from treasury_agent.tools.mock_market_data import MockMarketDataTool
-from treasury_agent.tools.mock_risk_assessment import MockRiskAssessmentTool
-from treasury_agent.tools.mock_payment_processor import MockPaymentProcessorTool
-from treasury_agent.tools.mock_audit_logger import MockAuditLoggerTool
+# Import the real tools for treasury agents (PROTOTYPE VERSION)
+# from treasury_agent.tools.mock_market_data import MockMarketDataTool
+# from treasury_agent.tools.mock_risk_assessment import MockRiskAssessmentTool
+# from treasury_agent.tools.mock_payment_processor import MockPaymentProcessorTool
+# from treasury_agent.tools.mock_audit_logger import MockAuditLoggerTool
 from treasury_agent.tools.excel_analysis_tool import ExcelAnalysisTool
 from treasury_agent.tools.treasury_usdt_payment_tool import TreasuryUSDTPaymentTool
 from treasury_agent.tools.treasury_risk_tools import TreasuryRiskTools
@@ -19,7 +19,7 @@ from treasury_agent.tools.treasury_risk_tools import TreasuryRiskTools
 
 @CrewBase
 class TreasuryAgent():
-    """Hierarchical Treasury Team - Treasury Manager coordinates specialist agents for payment processing and investment management"""
+    """Hierarchical Treasury Team - Treasury Manager coordinates specialist agents for payment processing (PROTOTYPE VERSION)"""
 
     agents: List[BaseAgent]
     tasks: List[Task]
@@ -58,35 +58,35 @@ class TreasuryAgent():
         return Agent(
             config=self.agents_config['payment_specialist'], # type: ignore[index]
             tools=[
-                TreasuryUSDTPaymentTool(), # USDT payment processing tool
-                MockMarketDataTool(), # Payment specialist needs market data for routing optimization
+                TreasuryUSDTPaymentTool(), # USDT payment processing tool (simulation mode)
                 ExcelAnalysisTool(), # Payment specialist needs Excel analysis for financial data insights
-                MockAuditLoggerTool()
+                # MockMarketDataTool(), # COMMENTED OUT FOR PROTOTYPE - mock market data
+                # MockAuditLoggerTool() # COMMENTED OUT FOR PROTOTYPE - mock audit logging
             ],
             llm=specialist_llm,
             verbose=True
         )
 
-    # Market Analyst - Handles investment analysis and surplus detection
-    @agent
-    def market_analyst(self) -> Agent:
-        # Create LLM instance for the market analyst using CrewAI's LLM class
-        analyst_llm = LLM(
-            model="bedrock/amazon.nova-micro-v1:0",
-            temperature=0.3,
-            max_tokens=2000
-        )
-        
-        return Agent(
-            config=self.agents_config['market_analyst'], # type: ignore[index]
-            tools=[
-                MockMarketDataTool(),
-                ExcelAnalysisTool(), # Market Analyst needs Excel analysis for financial data insights
-                MockAuditLoggerTool()
-            ],
-            llm=analyst_llm,
-            verbose=True
-        )
+    # Market Analyst - Handles investment analysis and surplus detection (COMMENTED OUT FOR PROTOTYPE)
+    # @agent
+    # def market_analyst(self) -> Agent:
+    #     # Create LLM instance for the market analyst using CrewAI's LLM class
+    #     analyst_llm = LLM(
+    #         model="bedrock/amazon.nova-micro-v1:0",
+    #         temperature=0.3,
+    #         max_tokens=2000
+    #     )
+    #     
+    #     return Agent(
+    #         config=self.agents_config['market_analyst'], # type: ignore[index]
+    #         tools=[
+    #             MockMarketDataTool(),
+    #             ExcelAnalysisTool(), # Market Analyst needs Excel analysis for financial data insights
+    #             MockAuditLoggerTool()
+    #         ],
+    #         llm=analyst_llm,
+    #         verbose=True
+    #     )
 
     # Risk Assessor - Handles compliance and balance validation
     @agent
@@ -102,9 +102,9 @@ class TreasuryAgent():
             config=self.agents_config['risk_assessor'], # type: ignore[index]
             tools=[
                 TreasuryRiskTools(), # Real risk tools for balance and limit validation
-                MockMarketDataTool(), # Risk assessor needs market data for risk evaluation
                 ExcelAnalysisTool(), # Risk assessor needs Excel analysis for financial data validation
-                MockAuditLoggerTool()
+                # MockMarketDataTool(), # COMMENTED OUT FOR PROTOTYPE - mock market data
+                # MockAuditLoggerTool() # COMMENTED OUT FOR PROTOTYPE - mock audit logging
             ],
             llm=assessor_llm,
             verbose=True
@@ -130,13 +130,13 @@ class TreasuryAgent():
             output_file='output/payment_analysis.md'
         )
 
-    # Market Analysis Task - Specialist analyzes investment opportunities
-    @task
-    def market_analysis_task(self) -> Task:
-        return Task(
-            config=self.tasks_config['market_analysis_task'], # type: ignore[index]
-            output_file='output/market_analysis.md'
-        )
+    # Market Analysis Task - Specialist analyzes investment opportunities (COMMENTED OUT FOR PROTOTYPE)
+    # @task
+    # def market_analysis_task(self) -> Task:
+    #     return Task(
+    #         config=self.tasks_config['market_analysis_task'], # type: ignore[index]
+    #         output_file='output/market_analysis.md'
+    #     )
 
     # Risk Assessment Task - Specialist validates compliance and balance
     @task
@@ -156,7 +156,7 @@ class TreasuryAgent():
 
     @crew
     def crew(self) -> Crew:
-        """Creates the Hierarchical Treasury Team crew"""
+        """Creates the Hierarchical Treasury Team crew (PROTOTYPE VERSION)"""
         # To learn how to add knowledge sources to your crew, check out the documentation:
         # https://docs.crewai.com/concepts/knowledge#what-is-knowledge
 
@@ -170,7 +170,7 @@ class TreasuryAgent():
         return Crew(
             agents=[
                 self.payment_specialist(),
-                self.market_analyst(), 
+                # self.market_analyst(), # COMMENTED OUT FOR PROTOTYPE - investment features
                 self.risk_assessor()
             ], # Only specialist agents - manager agent is specified separately
             tasks=self.tasks, # Automatically created by the @task decorator
@@ -179,5 +179,5 @@ class TreasuryAgent():
             manager_llm=manager_llm, # Specify LLM instance for the manager in hierarchical process
             planning=False, # Disable planning to avoid LLM issues with Task Execution Planner
             verbose=True,
-            # Manager will coordinate specialist agents for payment processing and investment management
+            # Manager will coordinate specialist agents for payment processing (PROTOTYPE VERSION)
         )

@@ -1,5 +1,5 @@
 from crewai.tools import BaseTool
-from typing import Type
+from typing import Type, Optional, Dict, Any
 from pydantic import BaseModel, Field
 from datetime import datetime, timedelta
 import json
@@ -17,6 +17,7 @@ class RiskToolsInput(BaseModel):
     currency: str = Field(default="USD", description="Currency for the transaction")
     user_id: str = Field(default="default", description="User identifier for tracking limits")
     transaction_type: str = Field(default="payment", description="Type of transaction: 'payment', 'investment'")
+    risk_config: Optional[Dict[str, Any]] = Field(default=None, description="Risk configuration dictionary from user JSON input")
 
 
 class TreasuryRiskTools(BaseTool):
@@ -51,9 +52,24 @@ class TreasuryRiskTools(BaseTool):
                 print(f"Warning: Could not initialize Web3 connection: {e}")
                 self._w3 = None
 
+    def _get_risk_param(self, risk_config, key, default):
+        if risk_config and key in risk_config:
+            return risk_config[key]
+        return default
+
+    def _get_limit_param(self, risk_config, limit_key, default):
+        if risk_config and 'transaction_limits' in risk_config and limit_key in risk_config['transaction_limits']:
+            return risk_config['transaction_limits'][limit_key]
+        return default
+
     def _run(self, action: str, wallet_address: str = "", amount: float = 0.0, 
-             currency: str = "USD", user_id: str = "default", transaction_type: str = "payment") -> str:
+             currency: str = "USD", user_id: str = "default", transaction_type: str = "payment", risk_config: Optional[Dict[str, Any]] = None) -> str:
         
+        self._minimum_balance_usd = self._get_risk_param(risk_config, 'min_balance_usd', 1000.0)
+        self._daily_limit_usd = self._get_limit_param(risk_config, 'daily', 50000.0)
+        self._monthly_limit_usd = self._get_limit_param(risk_config, 'monthly', 200000.0)
+        self._max_single_transaction_usd = self._get_limit_param(risk_config, 'single', 25000.0)
+
         if action == "check_balance":
             return self._check_balance(wallet_address, currency)
         elif action == "validate_transaction_limits":

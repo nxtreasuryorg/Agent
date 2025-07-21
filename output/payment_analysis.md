@@ -1,24 +1,16 @@
-Here is the complete payment proposal:
+Here is the payment proposal for sending $1,000 USD to Bob:
 
-**Payment Proposal:**
-
-**Payment Method:** USDC
-
-**Amount:** $1,000 USD
-
-**Recipient:** Bob
-
-**Recipient's Wallet Address:** [Please confirm the correct address]
+**Payment Method:** 
+- Preferred: USDT/USDC (not possible due to insufficient balance in the wallet)
+- Alternative: Fiat Transfer
 
 **Costs:**
-
-- **Conversion Fee:** $10 (1% of $1,000 USD)
-- **Gas Fees:** $61.52 USD
+- The transaction to send $1,000 USD via fiat transfer is compliant with the minimum balance requirement of $2,000 USD. The current balance is $20,163.37 USD.
 
 **Execution Plan:**
+1. Confirm the recipient's bank details.
+2. Process the $1,000 USD transfer via fiat.
+3. Monitor the transaction for completion.
 
-1. **Verify Recipient's Wallet Address**: Please confirm the correct USDC wallet address for Bob.
-2. **Check Sender's Wallet Balance**: The sender's wallet has a balance of 965.91 USDT and 0.018501 ETH.
-3. **Log Transaction Details**: Once the recipient's address is verified and correct, log the transaction details for compliance.
-
-**Approval Request:** Please review and approve the payment execution plan.
+**Approval Request:**
+Please review and approve the payment execution for sending $1,000 USD to Bob via fiat transfer.

@@ -1,5 +1,5 @@
-# HIERARCHICAL TREASURY TEAM TASKS
-# Treasury Manager coordinates team for payment processing and surplus investment
+# HIERARCHICAL TREASURY TEAM TASKS (PROTOTYPE VERSION)
+# Treasury Manager coordinates team for payment processing
 
 treasury_coordination_task:
   description: >
@@ -9,7 +9,6 @@ treasury_coordination_task:
     1. Extract payment amount and recipient
     2. Delegate risk assessment to Risk Assessor
     3. Delegate payment analysis to Payment Specialist
-    4. Delegate investment analysis to Market Analyst (if surplus available)
     
   expected_output: >
     Simple coordination plan with task delegation.
@@ -42,27 +41,28 @@ payment_processing_task:
   context:
     - treasury_coordination_task
 
-market_analysis_task:
-  description: >
-    Analyze investments for: {treasury_request}
-    
-    1. Calculate surplus after payment
-    2. Check if surplus > $1,000
-    3. If yes, suggest conservative investments
-    4. Request user approval
-    
-  expected_output: >
-    Simple investment proposal if surplus available.
-    
-  task_completion_criteria: >
-    - Surplus calculated
-    - Investment suggested (if applicable)
-    - Approval requested
-    
-  # No specific agent - let Treasury Manager delegate in hierarchical process
-  context:
-    - treasury_coordination_task
-    - payment_processing_task
+# Market Analysis Task - Specialist analyzes investment opportunities (COMMENTED OUT FOR PROTOTYPE)
+# market_analysis_task:
+#   description: >
+#     Analyze investments for: {treasury_request}
+#     
+#     1. Calculate surplus after payment
+#     2. Check if surplus > $1,000
+#     3. If yes, suggest conservative investments
+#     4. Request user approval
+#     
+#   expected_output: >
+#     Simple investment proposal if surplus available.
+#     
+#   task_completion_criteria: >
+#     - Surplus calculated
+#     - Investment suggested (if applicable)
+#     - Approval requested
+#     
+#   # No specific agent - let Treasury Manager delegate in hierarchical process
+#   context:
+#     - treasury_coordination_task
+#     - payment_processing_task
 
 risk_assessment_task:
   description: >
@@ -91,8 +91,7 @@ final_treasury_report_task:
     Combine all specialist results into simple summary:
     1. Risk assessment results
     2. Payment proposal
-    3. Investment proposal (if applicable)
-    4. Final recommendations
+    3. Final recommendations
     
   expected_output: >
     Simple final report with all specialist inputs.
@@ -105,6 +104,5 @@ final_treasury_report_task:
   context:
     - treasury_coordination_task
     - payment_processing_task
-    - market_analysis_task
     - risk_assessment_task
   output_file: output/final_treasury_report.md

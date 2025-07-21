@@ -983,3 +983,69 @@ The system prioritizes payment functionality while maintaining the flexibility t
 - Code is maintainable and well-documented for hierarchical multi-agent system
 
 This guide provides the roadmap - your expertise provides the implementation. Build systematically with proper team coordination, test thoroughly across all agents, and prioritize user safety and regulatory compliance above all else. 
+
+---
+
+## 🛠️ Prototype Deployment: Cloud & Client Integration (2024)
+
+### **Deployment Architecture**
+- The backend agent system will be deployed to a cloud provider (TBD)
+- A client web application will allow users to submit requests to the backend
+- The backend receives two main inputs:
+  1. **Excel file**: Financial data for analysis
+  2. **JSON payload**: User-supplied info for payment and risk configuration
+
+### **JSON Payload Structure**
+The JSON sent from the client should include:
+- `user_id`: Unique user identifier
+- `custody_wallet`: User's self-custody wallet address (source)
+- `recipient_wallet`: Destination wallet address
+- `payment`:
+    - `amount`: Amount to send
+    - `currency`: Currency (e.g., USDT)
+    - `purpose`: Description or memo
+- `risk_config`:
+    - `min_balance_usd`: Minimum USD balance to maintain
+    - `transaction_limits`:
+        - `single`: Max per transaction
+        - `daily`: Max per day
+        - `monthly`: Max per month
+- `user_notes`: (Optional) Additional user instructions
+
+#### **Example JSON**
+```json
+{
+  "user_id": "user_12345",
+  "custody_wallet": "0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6",
+  "recipient_wallet": "0x3f5CE5FBFe3E9af3971dD833D26BA9b5C936f0bE",
+  "payment": {
+    "amount": 1000.00,
+    "currency": "USDT",
+    "purpose": "Vendor payment for invoice #2024-001"
+  },
+  "risk_config": {
+    "min_balance_usd": 2000.00,
+    "transaction_limits": {
+      "single": 25000.00,
+      "daily": 50000.00,
+      "monthly": 200000.00
+    }
+  },
+  "user_notes": "Urgent payment, please process today if possible."
+}
+```
+
+### **Workflow**
+1. User uploads Excel file and fills out payment/risk info in the client web app
+2. Client sends Excel + JSON to backend API
+3. Backend agent processes the Excel and JSON:
+    - Runs payment analysis
+    - Runs risk assessment using parameters from JSON
+    - Returns a payment proposal or approval/rejection
+4. All risk checks (min balance, transaction limits) are parameterized by the JSON input
+5. System operates in simulation mode for all financial operations in the prototype
+
+### **Risk Tools**
+- The risk tools use the `risk_config` from the JSON to enforce min balance and transaction limits
+- All risk logic is simulated for safety in the prototype
+- No real funds are moved; all responses are clearly marked as simulation 
