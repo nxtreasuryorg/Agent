@@ -123,54 +123,40 @@ def submit_request():
         excel_bytes = excel_file.read()
         # For prototype, we do not persist the file
         
-        # Trigger the CrewAI agent logic here
-        # For now, we simulate by passing the JSON and filename as context
-        # In a real implementation, you would save the file and pass its path
-        try:
-            crew = TreasuryAgent()
-            # You may want to pass both the JSON and the Excel file (or its bytes/path) to the agent
-            # For now, we pass the JSON as a string and the filename for context
-            agent_inputs = {
-                'user_json': user_json,
-                'excel_filename': filename,
-                'excel_bytes': excel_bytes  # Not used in simulation, but available for real agent
+        # Parse payment details from Excel file (placeholder logic)
+        # TODO: Implement actual Excel parsing logic here
+        # For now, simulate a single payment row as an example
+        import random
+        payment_rows = [
+            {
+                'recipient_wallet': user_json.get('recipient_wallet', ''),
+                'amount': 1000.00,
+                'currency': 'USDT',
+                'purpose': 'Vendor payment',
+                'compliance_status': 'APPROVED',
+                'risk_summary': 'Within limits',
+                'notes': user_json.get('user_notes', '')
             }
-            # The agent should return a proposal dict matching the API contract
-            # For now, we simulate the agent's output as before
-            # result = crew.crew().kickoff(inputs=agent_inputs)
-            # Simulate compliance/risk check
-            payment = user_json.get('payment', {})
-            risk_config = user_json.get('risk_config', {})
-            user_id = user_json.get('user_id', '')
-            proposal_id = str(uuid.uuid4())
-            audit_id = str(uuid.uuid4())
-            compliance_status = 'APPROVED' if payment.get('amount', 0) <= risk_config.get('transaction_limits', {}).get('single', 25000) else 'REJECTED'
-            risk_summary = 'Within limits' if compliance_status == 'APPROVED' else 'Exceeds single transaction limit'
-            proposal = {
-                'proposal_id': proposal_id,
-                'user_id': user_id,
-                'proposed_payments': [
-                    {
-                        'recipient_wallet': user_json.get('recipient_wallet', ''),
-                        'amount': payment.get('amount', 0),
-                        'currency': payment.get('currency', ''),
-                        'purpose': payment.get('purpose', ''),
-                        'compliance_status': compliance_status,
-                        'risk_summary': risk_summary,
-                        'notes': user_json.get('user_notes', '')
-                    }
-                ],
-                'risk_assessment': {
-                    'overall_status': compliance_status,
-                    'details': risk_summary
-                },
-                'audit_id': audit_id,
-                'simulation_mode': True
-            }
-            proposals_store[proposal_id] = proposal
-            return jsonify(proposal)
-        except Exception as agent_exc:
-            return jsonify({'error': f'Agent error: {agent_exc}'}), 500
+        ]
+        # In production, payment_rows should be parsed from the Excel file
+        
+        user_id = user_json.get('user_id', '')
+        proposal_id = str(uuid.uuid4())
+        audit_id = str(uuid.uuid4())
+        # Risk assessment logic can use user_json['risk_config'] and payment_rows
+        proposal = {
+            'proposal_id': proposal_id,
+            'user_id': user_id,
+            'proposed_payments': payment_rows,
+            'risk_assessment': {
+                'overall_status': 'APPROVED',
+                'details': 'Within limits'
+            },
+            'audit_id': audit_id,
+            'simulation_mode': True
+        }
+        proposals_store[proposal_id] = proposal
+        return jsonify(proposal)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
 

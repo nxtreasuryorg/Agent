@@ -7,7 +7,7 @@ This document defines the JSON contract for each step in the treasury payment ap
 ## 1. Client → Backend: Initial Request
 
 **Purpose:**
-User uploads an Excel file and a JSON describing the payment and risk configuration.
+User uploads an Excel file and a JSON describing the user and risk configuration.
 
 **JSON Template:**
 ```json
@@ -15,11 +15,6 @@ User uploads an Excel file and a JSON describing the payment and risk configurat
   "user_id": "string",
   "custody_wallet": "string",  // e.g., Ethereum address
   "recipient_wallet": "string",
-  "payment": {
-    "amount": 1000.00,
-    "currency": "USDT",
-    "purpose": "string"
-  },
   "risk_config": {
     "min_balance_usd": 2000.00,
     "transaction_limits": {
@@ -32,6 +27,7 @@ User uploads an Excel file and a JSON describing the payment and risk configurat
 }
 ```
 **Note:**
+- Payment details (amount, currency, purpose, etc.) must be provided in the Excel file, not in the JSON payload.
 - The Excel file should be sent as a multipart/form-data upload, with the JSON as a separate field or file.
 
 ---
@@ -75,7 +71,7 @@ Backend returns a payment proposal for user review/approval.
 ## 3. Client → Backend: User Approval/Modification
 
 **Purpose:**
-User approves, rejects, or partially approves the proposal.
+User reviews the proposal and submits approval, rejection, or partial approval for each payment.
 
 **JSON Template:**
 ```json
@@ -124,7 +120,7 @@ User approves, rejects, or partially approves the proposal.
 ## 4. Backend → Client: Execution Result
 
 **Purpose:**
-Backend confirms execution (or simulation) of the approved payments.
+Backend returns the execution/simulation result for the proposal.
 
 **JSON Template:**
 ```json
@@ -155,7 +151,7 @@ Backend confirms execution (or simulation) of the approved payments.
   ],
   "audit_id": "string",
   "simulation_mode": true,
-  "timestamp": "ISO8601 string"
+  "timestamp": "2024-06-01T12:00:00Z"
 }
 ```
 **Note:**
@@ -169,3 +165,14 @@ Backend confirms execution (or simulation) of the approved payments.
 - Use clear status fields (`APPROVED`, `REJECTED`, etc.) for both machine and human readability.
 - Document these templates for your client/frontend team and keep them versioned.
 - Consider using JSON Schema or Pydantic models to enforce these structures on both backend and frontend. 
+
+---
+
+## Error Responses
+- All endpoints return JSON with an `error` field and appropriate HTTP status code on error.
+- Example:
+```json
+{
+  "error": "Proposal not found"
+}
+``` 

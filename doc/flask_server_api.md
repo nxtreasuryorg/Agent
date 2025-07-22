@@ -19,11 +19,6 @@ This document describes the REST API endpoints for the treasury approval/payment
   "user_id": "user_12345",
   "custody_wallet": "0x...",
   "recipient_wallet": "0x...",
-  "payment": {
-    "amount": 1000.00,
-    "currency": "USDT",
-    "purpose": "Vendor payment"
-  },
   "risk_config": {
     "min_balance_usd": 2000.00,
     "transaction_limits": {
@@ -35,6 +30,9 @@ This document describes the REST API endpoints for the treasury approval/payment
   "user_notes": "Urgent payment."
 }
 ```
+
+**Note:**
+- Payment details (amount, currency, purpose, etc.) must be provided in the Excel file, not in the JSON payload.
 
 **Response:**
 - 200 OK, JSON proposal (see `/get_proposal`)
