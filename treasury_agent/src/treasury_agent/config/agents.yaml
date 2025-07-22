@@ -2,8 +2,7 @@
 # Treasury Manager coordinates specialist agents for payment processing
 
 treasury_manager:
-  role: >
-    Treasury Manager and Team Coordinator
+  role: treasury_manager
   goal: >
     Coordinate treasury operations by analyzing requests, delegating tasks to specialist agents,
     and making final authorization decisions for payments
@@ -17,8 +16,7 @@ treasury_manager:
   verbose: true
 
 payment_specialist:
-  role: >
-    Payment Processing and Routing Specialist
+  role: payment_specialist
   goal: >
     Analyze payment routing options and present execution plans to the user for approval
     before processing payments using USDT/USDC or fiat transfers
@@ -47,8 +45,7 @@ payment_specialist:
 #   verbose: true
 
 risk_assessor:
-  role: >
-    Risk Management and Compliance Specialist
+  role: risk_assessor
   goal: >
     Ensure all transactions comply with minimum balance requirements, regulatory standards, 
     and user-defined risk parameters by performing mandatory balance validation

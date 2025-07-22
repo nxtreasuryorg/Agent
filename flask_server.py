@@ -105,57 +105,68 @@ def test_usdt_tool():
 
 @app.route('/submit_request', methods=['POST'])
 def submit_request():
-    """Accept Excel file + JSON, process, and return a payment proposal JSON with unique proposal_id."""
+    """Accept Excel file + JSON, process with agent, and return a payment proposal JSON with unique proposal_id."""
+    import tempfile
+    import json as pyjson
+    import os
     try:
         if 'json' not in request.form or 'excel' not in request.files:
             return jsonify({'error': 'Missing required fields: json and excel'}), 400
-        
+
         # Parse JSON
-        import json as pyjson
         try:
             user_json = pyjson.loads(request.form['json'])
         except Exception as e:
             return jsonify({'error': f'Invalid JSON: {e}'}), 400
-        
-        # Save Excel file temporarily (in memory)
+
+        # Save Excel file to a temporary file
         excel_file = request.files['excel']
         filename = secure_filename(excel_file.filename)
-        excel_bytes = excel_file.read()
-        # For prototype, we do not persist the file
-        
-        # Parse payment details from Excel file (placeholder logic)
-        # TODO: Implement actual Excel parsing logic here
-        # For now, simulate a single payment row as an example
-        import random
-        payment_rows = [
-            {
-                'recipient_wallet': user_json.get('recipient_wallet', ''),
-                'amount': 1000.00,
-                'currency': 'USDT',
-                'purpose': 'Vendor payment',
-                'compliance_status': 'APPROVED',
-                'risk_summary': 'Within limits',
-                'notes': user_json.get('user_notes', '')
+        with tempfile.NamedTemporaryFile(delete=False, suffix=os.path.splitext(filename)[-1]) as tmp:
+            tmp.write(excel_file.read())
+            temp_excel_path = tmp.name
+
+        # Prepare agent input: pass both JSON and Excel file path under 'treasury_request'
+        agent_inputs = {
+            'treasury_request': {
+                'user_json': user_json,
+                'excel_file_path': temp_excel_path
             }
-        ]
-        # In production, payment_rows should be parsed from the Excel file
-        
-        user_id = user_json.get('user_id', '')
+        }
+
+        # Run the agent (CrewAI)
+        crew = TreasuryAgent()
+        result = crew.crew().kickoff(inputs=agent_inputs)
+
+        # Convert agent output to JSON-serializable format
+        try:
+            agent_output = result.dict()
+        except AttributeError:
+            try:
+                agent_output = result.to_dict()
+            except AttributeError:
+                agent_output = str(result)
+
+        # Generate proposal_id and audit_id
         proposal_id = str(uuid.uuid4())
         audit_id = str(uuid.uuid4())
-        # Risk assessment logic can use user_json['risk_config'] and payment_rows
+
+        # Store the agent's output as the proposal
         proposal = {
             'proposal_id': proposal_id,
-            'user_id': user_id,
-            'proposed_payments': payment_rows,
-            'risk_assessment': {
-                'overall_status': 'APPROVED',
-                'details': 'Within limits'
-            },
+            'user_id': user_json.get('user_id', ''),
+            'agent_output': agent_output,
             'audit_id': audit_id,
             'simulation_mode': True
         }
         proposals_store[proposal_id] = proposal
+
+        # Clean up temp file
+        try:
+            os.remove(temp_excel_path)
+        except Exception:
+            pass
+
         return jsonify(proposal)
     except Exception as e:
         return jsonify({'error': str(e)}), 500
