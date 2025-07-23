@@ -1,0 +1,6 @@
+Date,Transaction_Type,Amount,Currency,Recipient,Purpose,Status
+2024-01-15,Payment,150.75,USDT,0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6,Development services,Pending
+2024-01-15,Payment,99.75,USDT,0x1234567890123456789012345678901234567890,Marketing services,Pending
+2024-01-10,Deposit,1000.00,USDT,Treasury,Initial funding,Completed
+2024-01-08,Payment,250.00,USDT,0xabcdef1234567890abcdef1234567890abcdef12,Consulting fees,Completed
+2024-01-05,Payment,75.50,USDT,0x9876543210987654321098765432109876543210,Software license,Completed

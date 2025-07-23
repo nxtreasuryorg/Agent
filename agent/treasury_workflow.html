@@ -1,0 +1,716 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>NxTreasury - Treasury Agent Workflow</title>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    <meta content="" name="keywords">
+    <meta content="" name="description">
+
+    <!-- Favicon -->
+    <link href="{{url_for('static' ,filename='images/fav-icon.png')}}" rel="icon">
+
+    <!-- Google Web Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@200..800&display=swap" rel="stylesheet">
+
+    <!-- Icon Font Stylesheet -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.10.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.4.1/font/bootstrap-icons.css" rel="stylesheet">
+
+    <!-- Libraries Stylesheet -->
+    <link href="{{url_for('static' ,filename='libs/animate/animate.min.css')}}" rel="stylesheet">
+    <link href="{{url_for('static' ,filename='libs/owlcarousel/assets/owl.carousel.min.css')}}" rel="stylesheet">
+
+    <!-- Customized Bootstrap Stylesheet -->
+    <link href="{{url_for('static' ,filename='css/bootstrap.min.css')}}" rel="stylesheet">
+
+    <!-- Stylesheet -->
+    <link href="{{url_for('static' ,filename='css/style_new2.css')}}" rel="stylesheet">
+
+    <!-- Treasury Agent Styles -->
+    <style>
+        :root {
+            --primary: #212529;
+            --primary-rgb: 33, 37, 41;
+            --success: #28a745;
+            --warning: #ffc107;
+            --danger: #dc3545;
+            --info: #17a2b8;
+        }
+
+        .treasury-container {
+            background: #f8f9fa;
+            border-radius: 12px;
+            padding: 2rem;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 2rem 0;
+        }
+
+        .workflow-progress {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding: 1rem;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #dee2e6;
+        }
+
+        .step-indicator {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+            position: relative;
+        }
+
+        .step-indicator:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 20px;
+            right: -50%;
+            width: 100%;
+            height: 2px;
+            background: #dee2e6;
+            z-index: 1;
+        }
+
+        .step-indicator.active::after {
+            background: var(--primary);
+        }
+
+        .step-indicator.completed::after {
+            background: var(--success);
+        }
+
+        .step-circle {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #dee2e6;
+            color: #6c757d;
+            font-weight: bold;
+            position: relative;
+            z-index: 2;
+            margin-bottom: 0.5rem;
+        }
+
+        .step-indicator.active .step-circle {
+            background: var(--primary);
+            color: white;
+        }
+
+        .step-indicator.completed .step-circle {
+            background: var(--success);
+            color: white;
+        }
+
+        .step-title {
+            font-size: 0.875rem;
+            font-weight: 600;
+            text-align: center;
+            color: #6c757d;
+        }
+
+        .step-indicator.active .step-title {
+            color: var(--primary);
+        }
+
+        .step-indicator.completed .step-title {
+            color: var(--success);
+        }
+
+        .step-content {
+            background: white;
+            border-radius: 8px;
+            padding: 2rem;
+            border: 1px solid #dee2e6;
+            margin-bottom: 1rem;
+        }
+
+        .json-display {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 1rem;
+            font-family: 'Courier New', monospace;
+            font-size: 0.875rem;
+            white-space: pre-wrap;
+            max-height: 400px;
+            overflow-y: auto;
+        }
+
+        .payment-card {
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+            background: white;
+        }
+
+        .payment-card.approved {
+            border-color: var(--success);
+            background: #f8fff9;
+        }
+
+        .payment-card.rejected {
+            border-color: var(--danger);
+            background: #fff8f8;
+        }
+
+        .btn-primary {
+            background-color: var(--primary);
+            border-color: var(--primary);
+        }
+
+        .btn-primary:hover {
+            background-color: #0d1117;
+            border-color: #0d1117;
+        }
+
+        .btn-success {
+            background-color: var(--success);
+            border-color: var(--success);
+        }
+
+        .btn-danger {
+            background-color: var(--danger);
+            border-color: var(--danger);
+        }
+
+        .form-control:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 0.2rem rgba(33, 37, 41, 0.25);
+        }
+
+        .alert {
+            border-radius: 8px;
+            margin-bottom: 1rem;
+        }
+
+        .connection-status {
+            position: absolute;
+            top: 1rem;
+            right: 1rem;
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            font-size: 0.875rem;
+            font-weight: 600;
+        }
+
+        .connection-status.connected {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+        }
+
+        .connection-status.disconnected {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+        }
+
+        .summary-card {
+            background: #e3f2fd;
+            border: 1px solid #bbdefb;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .execution-result {
+            background: #f1f8e9;
+            border: 1px solid #c8e6c9;
+            border-radius: 8px;
+            padding: 1rem;
+            margin-bottom: 1rem;
+        }
+
+        .transaction-item {
+            background: white;
+            border: 1px solid #dee2e6;
+            border-radius: 6px;
+            padding: 0.75rem;
+            margin-bottom: 0.5rem;
+        }
+
+        .transaction-item.success {
+            border-color: var(--success);
+            background: #f8fff9;
+        }
+
+        .transaction-item.failed {
+            border-color: var(--danger);
+            background: #fff8f8;
+        }
+
+        @media (max-width: 768px) {
+            .workflow-progress {
+                flex-direction: column;
+                gap: 1rem;
+            }
+
+            .step-indicator::after {
+                display: none;
+            }
+
+            .treasury-container {
+                padding: 1rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <!-- Treasury Agent Workflow Content -->
+    <div class="container-fluid py-5">
+        <div class="container">
+            <div class="treasury-container">
+                <!-- Connection Status -->
+                <div class="connection-status" id="connectionStatus">
+                    <i class="fas fa-circle"></i> Checking connection...
+                </div>
+
+                <!-- Header -->
+                <div class="text-center mb-4">
+                    <h1 class="display-6 text-primary">
+                        <i class="fas fa-university me-3"></i>Treasury Agent Workflow
+                    </h1>
+                    <p class="lead">Complete 4-step treasury payment processing with AI agent analysis</p>
+                </div>
+
+                <!-- Workflow Progress -->
+                <div class="workflow-progress">
+                    <div class="step-indicator {% if workflow_state.step >= 1 %}active{% endif %} {% if workflow_state.step > 1 %}completed{% endif %}">
+                        <div class="step-circle">1</div>
+                        <div class="step-title">Submit Request</div>
+                    </div>
+                    <div class="step-indicator {% if workflow_state.step >= 2 %}active{% endif %} {% if workflow_state.step > 2 %}completed{% endif %}">
+                        <div class="step-circle">2</div>
+                        <div class="step-title">Review Proposal</div>
+                    </div>
+                    <div class="step-indicator {% if workflow_state.step >= 3 %}active{% endif %} {% if workflow_state.step > 3 %}completed{% endif %}">
+                        <div class="step-circle">3</div>
+                        <div class="step-title">Submit Approval</div>
+                    </div>
+                    <div class="step-indicator {% if workflow_state.step >= 4 %}active{% endif %}">
+                        <div class="step-circle">4</div>
+                        <div class="step-title">View Results</div>
+                    </div>
+                </div>
+
+                <!-- Flash Messages -->
+                {% with messages = get_flashed_messages(with_categories=true) %}
+                    {% if messages %}
+                        {% for category, message in messages %}
+                            <div class="alert alert-{{ 'danger' if category == 'error' else category }} alert-dismissible fade show" role="alert">
+                                <i class="fas fa-{% if category == 'success' %}check-circle{% elif category == 'danger' or category == 'error' %}exclamation-triangle{% elif category == 'info' %}info-circle{% else %}bell{% endif %} me-2"></i>
+                                {{ message }}
+                                <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                            </div>
+                        {% endfor %}
+                    {% endif %}
+                {% endwith %}
+
+                <!-- Step 1: Submit Treasury Request -->
+                {% if workflow_state.step == 1 %}
+                <div class="step-content">
+                    <h3 class="mb-4">
+                        <i class="fas fa-upload text-primary me-2"></i>Step 1: Submit Treasury Request
+                    </h3>
+                    <p class="text-muted mb-4">Upload your Excel file and provide payment details for AI agent analysis.</p>
+                    
+                    <form method="POST" enctype="multipart/form-data">
+                        <input type="hidden" name="action" value="submit_request">
+                        
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="user_id" class="form-label">User ID</label>
+                                    <input type="text" class="form-control" id="user_id" name="user_id" 
+                                           value="{{ user.email if user else '' }}" readonly>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="amount" class="form-label">Amount *</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" id="amount" name="amount" 
+                                               step="0.01" min="0" required placeholder="250.50">
+                                        <select class="form-select" name="currency" style="max-width: 100px;">
+                                            <option value="USDT" selected>USDT</option>
+                                            <option value="USDC">USDC</option>
+                                            <option value="ETH">ETH</option>
+                                        </select>
+                                    </div>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="recipient_wallet" class="form-label">Recipient Wallet *</label>
+                                    <input type="text" class="form-control" id="recipient_wallet" name="recipient_wallet" 
+                                           required placeholder="0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6">
+                                </div>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label for="purpose" class="form-label">Purpose *</label>
+                                    <input type="text" class="form-control" id="purpose" name="purpose" 
+                                           required placeholder="Vendor payment for Q4 services">
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="priority" class="form-label">Priority</label>
+                                    <select class="form-select" id="priority" name="priority">
+                                        <option value="normal" selected>Normal</option>
+                                        <option value="high">High</option>
+                                        <option value="urgent">Urgent</option>
+                                    </select>
+                                </div>
+                                
+                                <div class="mb-3">
+                                    <label for="excel_file" class="form-label">Excel File *</label>
+                                    <input type="file" class="form-control" id="excel_file" name="excel_file" 
+                                           accept=".xlsx,.xls" required>
+                                    <div class="form-text">Upload Excel file with financial data for analysis</div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-paper-plane me-2"></i>Submit Treasury Request
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                {% endif %}
+
+                <!-- Step 2: Review Proposal -->
+                {% if workflow_state.step == 2 %}
+                <div class="step-content">
+                    <h3 class="mb-4">
+                        <i class="fas fa-search text-info me-2"></i>Step 2: Review Proposal
+                    </h3>
+                    <p class="text-muted mb-4">Your treasury request has been processed. Click to load the proposal for review.</p>
+                    
+                    <div class="summary-card">
+                        <h5><i class="fas fa-info-circle text-info me-2"></i>Request Summary</h5>
+                        <p><strong>Proposal ID:</strong> {{ workflow_state.proposal_id }}</p>
+                        <p><strong>Status:</strong> <span class="badge bg-warning">Waiting for Review</span></p>
+                    </div>
+                    
+                    <form method="POST">
+                        <input type="hidden" name="action" value="review_proposal">
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-info btn-lg">
+                                <i class="fas fa-eye me-2"></i>Load Proposal for Review
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                {% endif %}
+
+                <!-- Step 3: Submit Approval -->
+                {% if workflow_state.step == 3 and workflow_state.proposal_data %}
+                <div class="step-content">
+                    <h3 class="mb-4">
+                        <i class="fas fa-check-circle text-success me-2"></i>Step 3: Review & Approve Payments
+                    </h3>
+                    <p class="text-muted mb-4">Review the AI agent's payment proposal and make your approval decision.</p>
+                    
+                    <!-- Proposal Summary -->
+                    <div class="summary-card">
+                        <h5><i class="fas fa-chart-line text-primary me-2"></i>Proposal Summary</h5>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <strong>Total Amount:</strong><br>
+                                {{ workflow_state.proposal_data.total_amount }} {{ workflow_state.proposal_data.currency }}
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Payments:</strong><br>
+                                {{ workflow_state.proposal_data.payment_proposals|length }} payment(s)
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Status:</strong><br>
+                                <span class="badge bg-info">{{ workflow_state.proposal_data.status|title }}</span>
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Simulation Mode:</strong><br>
+                                <span class="badge bg-warning">{{ 'Yes' if workflow_state.proposal_data.simulation_mode else 'No' }}</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Payment Details -->
+                    <h5 class="mt-4 mb-3"><i class="fas fa-list text-primary me-2"></i>Payment Details</h5>
+                    {% for payment in workflow_state.proposal_data.payment_proposals %}
+                    <div class="payment-card">
+                        <div class="row align-items-center">
+                            <div class="col-md-8">
+                                <h6 class="mb-1">Payment #{{ loop.index }}</h6>
+                                <p class="mb-1"><strong>Amount:</strong> {{ payment.amount }} {{ payment.currency }}</p>
+                                <p class="mb-1"><strong>Recipient:</strong> {{ payment.recipient_wallet }}</p>
+                                <p class="mb-1"><strong>Purpose:</strong> {{ payment.purpose }}</p>
+                                <p class="mb-1"><strong>Priority:</strong> <span class="badge bg-secondary">{{ payment.priority|title }}</span></p>
+                                <p class="mb-0"><strong>Gas Fee:</strong> {{ payment.estimated_gas_fee }} ETH</p>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <span class="badge bg-info">{{ payment.status|title }}</span><br>
+                                <small class="text-muted">{{ payment.agent_recommendation }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    
+                    <!-- Approval Form -->
+                    <form method="POST" class="mt-4">
+                        <input type="hidden" name="action" value="submit_approval">
+                        
+                        <div class="mb-3">
+                            <label for="approval_decision" class="form-label">Approval Decision</label>
+                            <select class="form-select" id="approval_decision" name="approval_decision" required>
+                                <option value="approve_all" selected>Approve All Payments</option>
+                                <option value="reject_all">Reject All Payments</option>
+                                <option value="partial">Partial Approval (Advanced)</option>
+                            </select>
+                        </div>
+                        
+                        <div class="mb-3">
+                            <label for="comments" class="form-label">Comments</label>
+                            <textarea class="form-control" id="comments" name="comments" rows="3" 
+                                      placeholder="Add any comments about your approval decision..."></textarea>
+                        </div>
+                        
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success btn-lg me-3">
+                                <i class="fas fa-check me-2"></i>Submit Approval
+                            </button>
+                            <form method="POST" style="display: inline;">
+                                <input type="hidden" name="action" value="reset_workflow">
+                                <button type="submit" class="btn btn-outline-secondary">
+                                    <i class="fas fa-redo me-2"></i>Start Over
+                                </button>
+                            </form>
+                        </div>
+                    </form>
+                </div>
+                {% endif %}
+
+                <!-- Step 4: View Execution Results -->
+                {% if workflow_state.step == 4 %}
+                <div class="step-content">
+                    <h3 class="mb-4">
+                        <i class="fas fa-chart-bar text-success me-2"></i>Step 4: Execution Results
+                    </h3>
+                    <p class="text-muted mb-4">Your approval has been processed. Click to view the execution results.</p>
+                    
+                    {% if not workflow_state.execution_result %}
+                    <form method="POST">
+                        <input type="hidden" name="action" value="view_results">
+                        <div class="text-center">
+                            <button type="submit" class="btn btn-success btn-lg">
+                                <i class="fas fa-chart-line me-2"></i>Load Execution Results
+                            </button>
+                        </div>
+                    </form>
+                    {% else %}
+                    <!-- Execution Summary -->
+                    <div class="execution-result">
+                        <h5><i class="fas fa-trophy text-success me-2"></i>Execution Summary</h5>
+                        <div class="row">
+                            <div class="col-md-3">
+                                <strong>Status:</strong><br>
+                                <span class="badge bg-{% if workflow_state.execution_result.execution_status == 'SUCCESS' %}success{% elif workflow_state.execution_result.execution_status == 'PARTIAL_SUCCESS' %}warning{% else %}danger{% endif %}">
+                                    {{ workflow_state.execution_result.execution_status }}
+                                </span>
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Executed:</strong><br>
+                                {{ workflow_state.execution_result.summary.total_executed }} payment(s)
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Failed:</strong><br>
+                                {{ workflow_state.execution_result.summary.total_failed }} payment(s)
+                            </div>
+                            <div class="col-md-3">
+                                <strong>Total Amount:</strong><br>
+                                {{ workflow_state.execution_result.summary.total_amount_executed }} USDT
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Executed Payments -->
+                    {% if workflow_state.execution_result.executed_payments %}
+                    <h5 class="mt-4 mb-3"><i class="fas fa-check-circle text-success me-2"></i>Executed Payments</h5>
+                    {% for payment in workflow_state.execution_result.executed_payments %}
+                    <div class="transaction-item success">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h6 class="mb-1">{{ payment.purpose }}</h6>
+                                <p class="mb-1"><strong>Amount:</strong> {{ payment.amount }} {{ payment.currency }}</p>
+                                <p class="mb-1"><strong>Recipient:</strong> {{ payment.recipient_wallet }}</p>
+                                <p class="mb-1"><strong>Transaction ID:</strong> <code>{{ payment.transaction_id }}</code></p>
+                                <p class="mb-0"><strong>Gas Fee:</strong> {{ payment.gas_fee }} ETH</p>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <span class="badge bg-success">{{ payment.status }}</span><br>
+                                <small class="text-muted">{{ payment.execution_timestamp }}</small>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    
+                    <!-- Failed Payments -->
+                    {% if workflow_state.execution_result.failed_payments %}
+                    <h5 class="mt-4 mb-3"><i class="fas fa-times-circle text-danger me-2"></i>Failed Payments</h5>
+                    {% for payment in workflow_state.execution_result.failed_payments %}
+                    <div class="transaction-item failed">
+                        <div class="row">
+                            <div class="col-md-8">
+                                <h6 class="mb-1">{{ payment.purpose or 'Payment Failed' }}</h6>
+                                <p class="mb-1"><strong>Reason:</strong> {{ payment.reason }}</p>
+                                <p class="mb-0"><strong>Timestamp:</strong> {{ payment.timestamp }}</p>
+                            </div>
+                            <div class="col-md-4 text-end">
+                                <span class="badge bg-danger">FAILED</span>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                    {% endif %}
+                    
+                    <!-- Raw JSON Data -->
+                    <div class="mt-4">
+                        <h5><i class="fas fa-code text-primary me-2"></i>Raw Execution Data</h5>
+                        <div class="json-display">{{ workflow_state.execution_result | tojson(indent=2) }}</div>
+                    </div>
+                    
+                    <!-- Actions -->
+                    <div class="text-center mt-4">
+                        <form method="POST" style="display: inline;">
+                            <input type="hidden" name="action" value="reset_workflow">
+                            <button type="submit" class="btn btn-primary btn-lg">
+                                <i class="fas fa-plus me-2"></i>Start New Request
+                            </button>
+                        </form>
+                    </div>
+                    {% endif %}
+                </div>
+                {% endif %}
+
+                <!-- Error Display -->
+                {% if workflow_state.error_message %}
+                <div class="alert alert-danger">
+                    <h5><i class="fas fa-exclamation-triangle me-2"></i>Error</h5>
+                    <p class="mb-0">{{ workflow_state.error_message }}</p>
+                </div>
+                {% endif %}
+
+                <!-- Reset Workflow Button (always available) -->
+                <div class="text-center mt-4">
+                    <form method="POST" style="display: inline;">
+                        <input type="hidden" name="action" value="reset_workflow">
+                        <button type="submit" class="btn btn-outline-secondary">
+                            <i class="fas fa-redo me-2"></i>Reset Workflow
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JavaScript Libraries -->
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="{{url_for('static' ,filename='libs/wow/wow.min.js')}}"></script>
+    <script src="{{url_for('static' ,filename='libs/easing/easing.min.js')}}"></script>
+    <script src="{{url_for('static' ,filename='libs/waypoints/waypoints.min.js')}}"></script>
+    <script src="{{url_for('static' ,filename='libs/owlcarousel/owl.carousel.min.js')}}"></script>
+
+    <!-- Treasury Agent JavaScript -->
+    <script>
+        $(document).ready(function() {
+            // Test connection on page load
+            testConnection();
+            
+            // Auto-refresh connection status every 30 seconds
+            setInterval(testConnection, 30000);
+            
+            // Form validation
+            $('form').on('submit', function(e) {
+                const action = $(this).find('input[name="action"]').val();
+                
+                if (action === 'submit_request') {
+                    const amount = $('#amount').val();
+                    const recipient = $('#recipient_wallet').val();
+                    const purpose = $('#purpose').val();
+                    const file = $('#excel_file')[0].files[0];
+                    
+                    if (!amount || !recipient || !purpose || !file) {
+                        e.preventDefault();
+                        alert('Please fill in all required fields and upload an Excel file.');
+                        return false;
+                    }
+                    
+                    if (parseFloat(amount) <= 0) {
+                        e.preventDefault();
+                        alert('Amount must be greater than 0.');
+                        return false;
+                    }
+                    
+                    if (!recipient.startsWith('0x') || recipient.length !== 42) {
+                        e.preventDefault();
+                        alert('Please enter a valid Ethereum wallet address.');
+                        return false;
+                    }
+                }
+                
+                // Show loading state
+                const submitBtn = $(this).find('button[type="submit"]');
+                const originalText = submitBtn.html();
+                submitBtn.html('<i class="fas fa-spinner fa-spin me-2"></i>Processing...').prop('disabled', true);
+                
+                // Re-enable button after 5 seconds (fallback)
+                setTimeout(function() {
+                    submitBtn.html(originalText).prop('disabled', false);
+                }, 5000);
+            });
+        });
+        
+        function testConnection() {
+            $.ajax({
+                url: '{{ url_for("agent.test_agent_connection") }}',
+                type: 'POST',
+                success: function(response) {
+                    const statusEl = $('#connectionStatus');
+                    if (response.success) {
+                        statusEl.removeClass('disconnected').addClass('connected')
+                               .html('<i class="fas fa-check-circle"></i> Treasury Agent Connected');
+                    } else {
+                        statusEl.removeClass('connected').addClass('disconnected')
+                               .html('<i class="fas fa-times-circle"></i> Connection Failed');
+                    }
+                },
+                error: function() {
+                    $('#connectionStatus').removeClass('connected').addClass('disconnected')
+                                         .html('<i class="fas fa-times-circle"></i> Connection Error');
+                }
+            });
+        }
+        
+        // Auto-dismiss alerts after 10 seconds
+        setTimeout(function() {
+            $('.alert').fadeOut();
+        }, 10000);
+    </script>
+</body>
+
+</html>

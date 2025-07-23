@@ -1,0 +1,29 @@
+{
+  "user_id": "test_user_001",
+  "request_type": "payment",
+  "recipient_wallet": "0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6",
+  "amount": 250.50,
+  "currency": "USDT",
+  "purpose": "Vendor payment for Q4 services",
+  "priority": "high",
+  "payments": [
+    {
+      "payment_id": "pay_001",
+      "recipient_wallet": "0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6",
+      "amount": 150.75,
+      "currency": "USDT",
+      "purpose": "Development services",
+      "priority": "high"
+    },
+    {
+      "payment_id": "pay_002", 
+      "recipient_wallet": "0x1234567890123456789012345678901234567890",
+      "amount": 99.75,
+      "currency": "USDT",
+      "purpose": "Marketing services",
+      "priority": "normal"
+    }
+  ],
+  "approval_required": true,
+  "notes": "Monthly vendor payments for Q4 2024"
+}
