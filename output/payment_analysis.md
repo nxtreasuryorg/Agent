@@ -1,45 +1,22 @@
-Here is the complete payment proposal for the payment request from user test_user_001:
+Here is the complete payment proposal for user test_user_001:
 
-**Payment Method:** USDT
+**Payment Proposal:**
 
-**Total Payment Amount:** $215,000.00
+1. **Payment Method**: USDT (preferred)
+2. **Payment Details**:
+   - Amount: 150.75 USDT
+     Recipient: 0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6
+     Purpose: Development services
+     Status: Pending
+   - Amount: 99.75 USDT
+     Recipient: 0x1234567890123456789012345678901234567890
+     Purpose: Marketing services
+     Status: Pending
+3. **Costs**:
+   - Transaction fees: TBD (to be determined based on the chosen payment method)
+4. **Execution Plan**:
+   - Approve the payment details and execute the transactions once the transaction fees are determined.
+5. **User Approval Request**:
+   - Please review and approve the payment proposal for the vendor payments from the uploaded Excel file for Q4 2024. Prioritize high-priority payments first.
 
-**Total Gas Cost:** $226.27
-
-**Grand Total Cost:** $215,226.27
-
-**Execution Plan:**
-
-1. **Wallet Address Validation:**
-   - Wallet Address: 0xYourWalletAddressHere
-   - ETH Balance: 0.027518 ETH (≈$96.31)
-   - USDT Balance: 723.22 USDT
-
-2. **Gas Estimation:**
-   - Current Gas Price: 38.30 Gwei
-   - Adjusted Gas Price: 51.71 Gwei (35% buffer)
-   - Gas Limit: 401,000 units
-   - Estimated Cost: 0.020735 ETH
-   - Estimated Cost USD: $72.57 (at $3500/ETH)
-
-3. **Total Payment Amount:**
-   - Total USDT Payment Amount: $215,000.00
-
-4. **Gas Cost:**
-   - Total Gas Cost: $226.27
-
-5. **Execution Plan:**
-   - Prioritize high-priority payments first.
-   - Subtract gas cost from the total payment amount: $215,000.00 - $226.27 = $214,773.73
-   - Allocate remaining balance for future transactions or contingencies.
-
-6. **Transaction Execution:**
-   - Action: Execute Payment
-   - Wallet Address: 0xYourWalletAddressHere
-   - Recipient Address: [Recipient Address]
-   - Amount USDT: 214,773.73
-   - Private Key: [Your Private Key]
-
-   Note: NEVER execute payments without explicit user approval.
-
-Please review and approve this payment proposal.
+Please confirm if this proposal is acceptable and if you require any further details or adjustments.

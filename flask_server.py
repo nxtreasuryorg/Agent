@@ -38,54 +38,135 @@ proposals_store = {}
 execution_results_store = {}
 processing_status = {}  # Track async processing status
 
-def parse_agent_output_to_proposals(agent_output, user_json):
-    """Parse agent output and create structured payment proposals"""
+def parse_agent_output_to_proposals(agent_output, user_json, excel_path=None):
+    """Parse agent output and create structured payment proposals from Excel data"""
     try:
-        # Extract payment information from user JSON or create default proposals
-        payments = user_json.get('payments', [])
+        # Import pandas here to avoid dependency if not used
+        import pandas as pd
         
-        if not payments:
-            # Create a default payment proposal based on user request
-            payments = [{
-                'payment_id': str(uuid.uuid4()),
-                'recipient_wallet': user_json.get('recipient_wallet', '0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6'),
-                'amount': user_json.get('amount', 100),
-                'currency': user_json.get('currency', 'USDT'),
-                'purpose': user_json.get('purpose', 'Treasury payment'),
-                'priority': user_json.get('priority', 'normal')
-            }]
-        
-        # Ensure each payment has required fields
-        structured_payments = []
-        for payment in payments:
-            structured_payment = {
-                'payment_id': payment.get('payment_id', str(uuid.uuid4())),
-                'recipient_wallet': payment.get('recipient_wallet', ''),
-                'amount': float(payment.get('amount', 0)),
-                'currency': payment.get('currency', 'USDT'),
-                'purpose': payment.get('purpose', 'Treasury payment'),
-                'priority': payment.get('priority', 'normal'),
-                'estimated_gas_fee': 0.001,  # Simulated gas fee
-                'status': 'pending_approval',
-                'agent_recommendation': 'Approved by treasury analysis'
+        # If no Excel path is provided, try to extract it from the agent output
+        if not excel_path and hasattr(agent_output, 'excel_path'):
+            excel_path = agent_output.excel_path
+            
+        if not excel_path:
+            raise ValueError("No Excel file path provided for payment extraction")
+            
+        # Read Excel file
+        try:
+            df = pd.read_excel(excel_path)
+            print(f"📊 Read Excel file with {len(df)} rows")
+            
+            # Convert column names to lowercase for case-insensitive matching
+            df_columns = [str(col).lower() for col in df.columns]
+            
+            # Map expected columns to possible variations
+            col_mapping = {
+                'recipient': ['recipient', 'wallet', 'to', 'receiver', 'address'],
+                'amount': ['amount', 'value', 'payment', 'sum'],
+                'purpose': ['purpose', 'description', 'note', 'details'],
+                'currency': ['currency', 'token', 'asset'],
+                'date': ['date', 'time', 'timestamp', 'when']
             }
-            structured_payments.append(structured_payment)
-        
-        return structured_payments
-        
+            
+            # Find matching columns
+            matched_cols = {}
+            for col_type, possible_names in col_mapping.items():
+                for name in possible_names:
+                    if name in df_columns:
+                        matched_cols[col_type] = df_columns.index(name)
+                        break
+            
+            # Ensure we have at least recipient and amount
+            if 'recipient' not in matched_cols or 'amount' not in matched_cols:
+                raise ValueError("Excel file must contain columns for recipient and amount")
+            
+            # Process each row into a payment
+            structured_payments = []
+            for _, row in df.iterrows():
+                try:
+                    # Skip non-payment rows if transaction type is specified
+                    if 'transaction_type' in df_columns and 'Transaction_Type' in df.columns:
+                        if row['Transaction_Type'].lower() != 'payment':
+                            continue
+                    
+                    # Get values with fallbacks
+                    recipient = str(row.iloc[matched_cols['recipient']]).strip()
+                    amount = float(row.iloc[matched_cols['amount']])
+                    
+                    # Skip invalid amounts
+                    if amount <= 0:
+                        continue
+                        
+                    # Get optional fields with fallbacks
+                    currency = 'USDT'  # Default currency
+                    if 'currency' in matched_cols:
+                        try:
+                            currency = str(row.iloc[matched_cols['currency']]).strip().upper()
+                            if not currency:  # If empty, use default
+                                currency = 'USDT'
+                        except:
+                            pass
+                            
+                    purpose = 'Treasury payment'  # Default purpose
+                    if 'purpose' in matched_cols:
+                        try:
+                            purpose = str(row.iloc[matched_cols['purpose']])
+                            if not purpose or purpose.lower() == 'nan':
+                                purpose = 'Treasury payment'
+                        except:
+                            pass
+                    
+                    # Create payment proposal
+                    payment = {
+                        'payment_id': str(uuid.uuid4()),
+                        'recipient_wallet': recipient,
+                        'amount': amount,
+                        'currency': currency,
+                        'purpose': purpose,
+                        'priority': 'normal',  # Default priority
+                        'estimated_gas_fee': 0.001,  # Simulated gas fee
+                        'status': 'pending_approval',
+                        'agent_recommendation': 'Extracted from Excel data',
+                        'source': 'excel_import'
+                    }
+                    
+                    # Add date if available
+                    if 'date' in matched_cols:
+                        try:
+                            payment['date'] = str(row.iloc[matched_cols['date']])
+                        except:
+                            pass
+                            
+                    structured_payments.append(payment)
+                    
+                except Exception as row_error:
+                    print(f"⚠️ Error processing row {_}: {row_error}")
+                    continue
+            
+            if not structured_payments:
+                raise ValueError("No valid payment records found in the Excel file")
+                
+            print(f"✅ Extracted {len(structured_payments)} payment(s) from Excel file")
+            return structured_payments
+            
+        except Exception as excel_error:
+            print(f"⚠️ Error processing Excel file: {excel_error}")
+            raise
+            
     except Exception as e:
-        print(f"⚠️ Error parsing agent output: {e}")
-        # Return a default payment structure
+        print(f"⚠️ Error in parse_agent_output_to_proposals: {e}")
+        # Return a default payment structure as fallback
         return [{
             'payment_id': str(uuid.uuid4()),
-            'recipient_wallet': '0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6',
+            'recipient_wallet': user_json.get('custody_wallet', '0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6'),
             'amount': 100.0,
             'currency': 'USDT',
-            'purpose': 'Default treasury payment',
+            'purpose': 'Treasury payment (fallback)',
             'priority': 'normal',
             'estimated_gas_fee': 0.001,
             'status': 'pending_approval',
-            'agent_recommendation': 'Default proposal due to parsing error'
+            'agent_recommendation': 'Default proposal due to error in processing Excel data',
+            'error': str(e)
         }]
 
 @app.route('/health', methods=['GET'])
@@ -204,8 +285,8 @@ def submit_request():
                 # Use fallback analysis when agent fails
                 agent_output = f"Treasury analysis completed using fallback mode. Original request: {treasury_request}. Payments have been analyzed and approved for processing."
             
-            # Create structured payment proposal from agent output
-            payment_proposals = parse_agent_output_to_proposals(agent_output, user_json)
+            # Create structured payment proposal from Excel data
+            payment_proposals = parse_agent_output_to_proposals(agent_output, user_json, excel_path=temp_excel_path)
             
             # Create the structured proposal response
             proposal = {
