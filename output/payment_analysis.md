@@ -2,38 +2,44 @@ Here is the complete payment proposal for the payment request from user test_use
 
 **Payment Method:** USDT
 
-**Payment Details:**
-- **Total Amount:** 250.5 USDT
-- **Currency:** USDT
-- **Purpose:** Vendor payment for Q4 services
-- **Priority:** High
-- **Payments Breakdown:**
-  - **Payment 1:**
-    - **Payment ID:** pay_001
-    - **Recipient Wallet:** 0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6
-    - **Amount:** 150.75 USDT
-    - **Purpose:** Development services
-    - **Priority:** High
-  - **Payment 2:**
-    - **Payment ID:** pay_002
-    - **Recipient Wallet:** 0x1234567890123456789012345678901234567890
-    - **Amount:** 99.75 USDT
-    - **Purpose:** Marketing services
-    - **Priority:** Normal
+**Total Payment Amount:** $215,000.00
 
-**Costs:** 
-- **Transaction Fees:** 0.5 USDT (estimated)
-- **Total Cost:** 251 USDT (including fees)
+**Total Gas Cost:** $226.27
+
+**Grand Total Cost:** $215,226.27
 
 **Execution Plan:**
-- **Step 1:** Confirm payment method and details with the user.
-- **Step 2:** Execute the payment to the recipient wallets.
-- **Step 3:** Monitor the transaction for completion and confirmation.
 
-**Risk Assessment:** 
-- The payment request complies with all minimum balance requirements and transaction limits.
-- The current account balance of `5366.279212 USDT` is well above the minimum required balance.
-- The transaction amount of `250.5 USDT` is within the daily and monthly limits.
+1. **Wallet Address Validation:**
+   - Wallet Address: 0xYourWalletAddressHere
+   - ETH Balance: 0.027518 ETH (≈$96.31)
+   - USDT Balance: 723.22 USDT
 
-**Approval Request:**
-- Please review and approve the payment proposal for execution.
+2. **Gas Estimation:**
+   - Current Gas Price: 38.30 Gwei
+   - Adjusted Gas Price: 51.71 Gwei (35% buffer)
+   - Gas Limit: 401,000 units
+   - Estimated Cost: 0.020735 ETH
+   - Estimated Cost USD: $72.57 (at $3500/ETH)
+
+3. **Total Payment Amount:**
+   - Total USDT Payment Amount: $215,000.00
+
+4. **Gas Cost:**
+   - Total Gas Cost: $226.27
+
+5. **Execution Plan:**
+   - Prioritize high-priority payments first.
+   - Subtract gas cost from the total payment amount: $215,000.00 - $226.27 = $214,773.73
+   - Allocate remaining balance for future transactions or contingencies.
+
+6. **Transaction Execution:**
+   - Action: Execute Payment
+   - Wallet Address: 0xYourWalletAddressHere
+   - Recipient Address: [Recipient Address]
+   - Amount USDT: 214,773.73
+   - Private Key: [Your Private Key]
+
+   Note: NEVER execute payments without explicit user approval.
+
+Please review and approve this payment proposal.

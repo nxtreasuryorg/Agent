@@ -1,64 +1,68 @@
-# JSON Templates for Client-Backend Treasury Approval Flow
+# Treasury Agent - JSON Contract
 
-This document defines the JSON contract for each step in the treasury payment approval workflow. Use these templates for both backend and client development to ensure consistent, reliable communication.
+This document defines the JSON schemas for the Treasury Agent API.
 
----
+## 1. Initial Request (`POST /submit_request`)
 
-## 1. Client → Backend: Initial Request
+**Request (multipart/form-data):**
+- `excel`: Payment details file
+- `json`: Metadata (see below)
 
-**Purpose:**
-User uploads an Excel file and a JSON describing the user and risk configuration.
-
-**JSON Template:**
 ```json
 {
-  "user_id": "string",
-  "custody_wallet": "string",  // e.g., Ethereum address
-  "recipient_wallet": "string",
+  "user_id": "user_12345",
+  "custody_wallet": "0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6",
   "risk_config": {
     "min_balance_usd": 2000.00,
     "transaction_limits": {
       "single": 25000.00,
       "daily": 50000.00,
       "monthly": 200000.00
-    }
+    },
+    "allowed_currencies": ["USDT", "USDC"]
   },
-  "user_notes": "string (optional)"
-}
-```
-**Note:**
-- Payment details (amount, currency, purpose, etc.) must be provided in the Excel file, not in the JSON payload.
-- The Excel file should be sent as a multipart/form-data upload, with the JSON as a separate field or file.
-
----
-
-## 2. Backend → Client: Payment Proposal
-
-**Purpose:**
-Backend returns a payment proposal for user review/approval.
-
-**JSON Template:**
-```json
-{
-  "proposal_id": "string",  // Unique ID for this proposal
-  "user_id": "string",
-  "proposed_payments": [
+  "payments": [
     {
-      "recipient_wallet": "string",
+      "payment_id": "pay_1",
+      "recipient_wallet": "0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6",
       "amount": 1000.00,
       "currency": "USDT",
-      "purpose": "string",
-      "compliance_status": "APPROVED | REQUIRES_REVIEW | REJECTED",
-      "risk_summary": "string",
-      "notes": "string (optional)"
+      "purpose": "Vendor payment"
     }
-    // ... more payments if batch
+  ]
+}
+```
+
+**Response (200 OK):**
+```json
+{
+  "proposal_id": "prop_123",
+  "status": "processing"
+}
+```
+
+## 2. Payment Proposal (`GET /get_proposal/{id}`)
+
+**Response (200 OK):**
+```json
+{
+  "proposal_id": "prop_123",
+  "status": "ready",
+  "proposed_payments": [
+    {
+      "payment_id": "pay_1",
+      "recipient_wallet": "0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6",
+      "amount": 1000.00,
+      "currency": "USDT",
+      "purpose": "Vendor payment",
+      "compliance_status": "APPROVED",
+      "estimated_gas_fee": 0.001
+    }
   ],
   "risk_assessment": {
-    "overall_status": "APPROVED | REQUIRES_REVIEW | REJECTED",
-    "details": "string"
+    "overall_status": "APPROVED",
+    "details": "Within limits"
   },
-  "audit_id": "string",  // For traceability
   "simulation_mode": true
 }
 ```
@@ -68,47 +72,34 @@ Backend returns a payment proposal for user review/approval.
 
 ---
 
-## 3. Client → Backend: User Approval/Modification
+## 3. Approval Submission (`POST /submit_approval`)
 
-**Purpose:**
-User reviews the proposal and submits approval, rejection, or partial approval for each payment.
-
-**JSON Template:**
+**Request:**
 ```json
 {
-  "proposal_id": "string",
-  "user_id": "string",
+  "proposal_id": "prop_123",
+  "user_id": "user_12345",
+  "approval_decision": "approve_all",
   "approved_payments": [
     {
-      "recipient_wallet": "string",
+      "payment_id": "pay_1",
+      "recipient_wallet": "0x742d35Cc6634C0532925a3b8D4C9db96C4b4d8b6",
       "amount": 1000.00,
-      "currency": "USDT",
-      "purpose": "string"
+      "currency": "USDT"
     }
-    // ... more if batch
   ],
-  "rejected_payments": [
-    {
-      "recipient_wallet": "string",
-      "amount": 500.00,
-      "currency": "USDT",
-      "purpose": "string",
-      "reason": "string (optional)"
-    }
-    // ... more if batch
-  ],
-  "partial_modifications": [
-    {
-      "recipient_wallet": "string",
-      "original_amount": 1000.00,
-      "approved_amount": 800.00,
-      "currency": "USDT",
-      "purpose": "string",
-      "user_comment": "string (optional)"
-    }
-    // ... more if batch
-  ],
-  "user_notes": "string (optional)"
+  "rejected_payments": [],
+  "partial_modifications": [],
+  "comments": "Approving all payments"
+}
+```
+
+**Response (200 OK):**
+```json
+{
+  "proposal_id": "prop_123",
+  "execution_id": "exec_456",
+  "status": "processing"
 }
 ```
 **Note:**
