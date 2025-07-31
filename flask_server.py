@@ -6,6 +6,7 @@ import json
 import tempfile
 from datetime import datetime
 from pathlib import Path
+from typing import Dict, Any
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 import uuid
@@ -387,6 +388,40 @@ def submit_approval():
         # Execute approved payments (simulated)
         for payment in approved_payments:
             try:
+                # Handle both payment objects and payment IDs
+                if isinstance(payment, str):
+                    payment_obj = None
+                    payment_proposals = proposal.get('payment_proposals', [])
+                    
+                    # First try to find by UUID payment_id
+                    for p in payment_proposals:
+                        if p.get('payment_id') == payment:
+                            payment_obj = p
+                            break
+                    
+                    # If not found, try to find by array index (for frontend compatibility)
+                    if not payment_obj and payment.isdigit():
+                        try:
+                            index = int(payment)
+                            if 0 <= index < len(payment_proposals):
+                                payment_obj = payment_proposals[index]
+                        except (ValueError, IndexError):
+                            pass
+                    
+                    if not payment_obj:
+                        raise ValueError(f"Payment ID/Index {payment} not found in proposal (available: {len(payment_proposals)} payments)")
+                    payment = payment_obj
+                elif isinstance(payment, (int, float)):
+                    # Handle numeric indices directly
+                    payment_proposals = proposal.get('payment_proposals', [])
+                    index = int(payment)
+                    if 0 <= index < len(payment_proposals):
+                        payment = payment_proposals[index]
+                    else:
+                        raise ValueError(f"Payment index {index} out of range (available: {len(payment_proposals)} payments)")
+                elif not isinstance(payment, dict):
+                    raise ValueError(f"Invalid payment object type: {type(payment)}")
+                
                 transaction_id = str(uuid.uuid4())
                 executed_payment = {
                     'payment_id': payment.get('payment_id', str(uuid.uuid4())),
@@ -403,8 +438,10 @@ def submit_approval():
                 executed_payments.append(executed_payment)
                 print(f"✅ Simulated payment: {payment.get('amount', 0)} {payment.get('currency', 'USDT')} to {payment.get('recipient_wallet', 'N/A')}")
             except Exception as e:
+                # Handle error case properly
+                error_payment = payment if isinstance(payment, dict) else {'payment_id': str(payment), 'error': 'Invalid payment object'}
                 failed_payments.append({
-                    **payment,
+                    **error_payment,
                     'reason': f'Execution failed: {str(e)}',
                     'timestamp': datetime.utcnow().isoformat() + 'Z'
                 })
