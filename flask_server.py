@@ -284,7 +284,7 @@ def submit_request():
             except Exception as agent_error:
                 print(f"⚠️ Agent failed, using fallback: {agent_error}")
                 # Use fallback analysis when agent fails
-                agent_output = f"Treasury analysis completed using fallback mode. Original request: {treasury_request}. Payments have been analyzed and approved for processing."
+                #agent_output = f"Treasury analysis completed using fallback mode. Original request: {treasury_request}. Payments have been analyzed and approved for processing."
             
             # Create structured payment proposal from Excel data
             payment_proposals = parse_agent_output_to_proposals(agent_output, user_json, excel_path=temp_excel_path)

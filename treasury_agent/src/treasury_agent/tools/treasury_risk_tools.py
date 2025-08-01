@@ -12,12 +12,13 @@ import requests
 class RiskToolsInput(BaseModel):
     """Input schema for TreasuryRiskTools."""
     action: str = Field(..., description="Action to perform: 'check_balance', 'validate_transaction_limits', 'check_minimum_balance', 'assess_risk'")
-    wallet_address: str = Field(default="", description="Wallet address to check balance")
-    amount: float = Field(default=0.0, description="Transaction amount to validate")
+    wallet_address: str = Field(default="", description="Wallet address to check balance (required for balance checks)")
+    amount: float = Field(default=0.0, description="Transaction amount to validate (required for limit/risk assessments)")
     currency: str = Field(default="USD", description="Currency for the transaction")
     user_id: str = Field(default="default", description="User identifier for tracking limits")
     transaction_type: str = Field(default="payment", description="Type of transaction: 'payment', 'investment'")
     risk_config: Optional[Dict[str, Any]] = Field(default=None, description="Risk configuration dictionary from user JSON input")
+    treasury_request: Optional[str] = Field(default=None, description="Full treasury request string (alternative way to pass configuration)")
 
 
 class TreasuryRiskTools(BaseTool):
@@ -53,33 +54,113 @@ class TreasuryRiskTools(BaseTool):
                 self._w3 = None
 
     def _get_risk_param(self, risk_config, key, default):
-        if risk_config and key in risk_config:
-            return risk_config[key]
-        return default
+        """Safely extract a risk parameter from configuration with fallback to default."""
+        try:
+            if risk_config and isinstance(risk_config, dict) and key in risk_config:
+                value = risk_config[key]
+                # Ensure the value is a valid number for numeric parameters
+                if key.endswith('_usd') and isinstance(value, (int, float)) and value >= 0:
+                    return float(value)
+                elif not key.endswith('_usd'):  # Non-USD parameters (strings, etc.)
+                    return value
+            return default
+        except Exception as e:
+            print(f"Warning: Error extracting risk parameter '{key}': {e}. Using default: {default}")
+            return default
 
     def _get_limit_param(self, risk_config, limit_key, default):
-        if risk_config and 'transaction_limits' in risk_config and limit_key in risk_config['transaction_limits']:
-            return risk_config['transaction_limits'][limit_key]
-        return default
+        """Safely extract a transaction limit parameter from configuration with fallback to default."""
+        try:
+            if (risk_config and isinstance(risk_config, dict) and 
+                'transaction_limits' in risk_config and 
+                isinstance(risk_config['transaction_limits'], dict) and 
+                limit_key in risk_config['transaction_limits']):
+                
+                value = risk_config['transaction_limits'][limit_key]
+                # Ensure the value is a valid positive number
+                if isinstance(value, (int, float)) and value >= 0:
+                    return float(value)
+            return default
+        except Exception as e:
+            print(f"Warning: Error extracting limit parameter '{limit_key}': {e}. Using default: {default}")
+            return default
+
+    def _extract_risk_config_from_request(self, treasury_request: str) -> Optional[Dict[str, Any]]:
+        """Extract risk configuration from treasury request string."""
+        try:
+            if not treasury_request:
+                return None
+                
+            # Try to find JSON content in the treasury request
+            import re
+            json_match = re.search(r'Request details: ({.*})', treasury_request)
+            if json_match:
+                request_json = json.loads(json_match.group(1))
+                
+                # Extract risk-related configuration from the JSON
+                risk_config = {}
+                
+                # Common risk parameter mappings
+                if 'min_balance' in request_json:
+                    risk_config['min_balance_usd'] = float(request_json['min_balance'])
+                if 'minimum_balance' in request_json:
+                    risk_config['min_balance_usd'] = float(request_json['minimum_balance'])
+                if 'risk_settings' in request_json:
+                    risk_config.update(request_json['risk_settings'])
+                if 'transaction_limits' in request_json:
+                    risk_config['transaction_limits'] = request_json['transaction_limits']
+                    
+                return risk_config if risk_config else None
+                
+        except Exception as e:
+            print(f"Warning: Could not extract risk config from treasury request: {e}")
+            return None
 
     def _run(self, action: str, wallet_address: str = "", amount: float = 0.0, 
-             currency: str = "USD", user_id: str = "default", transaction_type: str = "payment", risk_config: Optional[Dict[str, Any]] = None) -> str:
+             currency: str = "USD", user_id: str = "default", transaction_type: str = "payment", 
+             risk_config: Optional[Dict[str, Any]] = None, treasury_request: Optional[str] = None) -> str:
         
-        self._minimum_balance_usd = self._get_risk_param(risk_config, 'min_balance_usd', 1000.0)
-        self._daily_limit_usd = self._get_limit_param(risk_config, 'daily', 50000.0)
-        self._monthly_limit_usd = self._get_limit_param(risk_config, 'monthly', 200000.0)
-        self._max_single_transaction_usd = self._get_limit_param(risk_config, 'single', 25000.0)
+        try:
+            # Try to extract risk configuration from treasury_request if risk_config is not provided
+            if not risk_config and treasury_request:
+                risk_config = self._extract_risk_config_from_request(treasury_request)
+                if risk_config:
+                    print(f"Extracted risk config from treasury request: {risk_config}")
+            
+            # Safely extract risk configuration with fallbacks
+            self._minimum_balance_usd = self._get_risk_param(risk_config, 'min_balance_usd', 1000.0)
+            self._daily_limit_usd = self._get_limit_param(risk_config, 'daily', 50000.0)
+            self._monthly_limit_usd = self._get_limit_param(risk_config, 'monthly', 200000.0)
+            self._max_single_transaction_usd = self._get_limit_param(risk_config, 'single', 25000.0)
 
-        if action == "check_balance":
-            return self._check_balance(wallet_address, currency)
-        elif action == "validate_transaction_limits":
-            return self._validate_transaction_limits(amount, currency, user_id, transaction_type)
-        elif action == "check_minimum_balance":
-            return self._check_minimum_balance(wallet_address, currency)
-        elif action == "assess_risk":
-            return self._assess_risk(amount, currency, user_id, transaction_type)
-        else:
-            return f"Unknown action: {action}. Available actions: check_balance, validate_transaction_limits, check_minimum_balance, assess_risk"
+            # Validate action parameter
+            valid_actions = ["check_balance", "validate_transaction_limits", "check_minimum_balance", "assess_risk"]
+            if not action or action not in valid_actions:
+                return f"Error: Invalid or missing action. Supported actions: {', '.join(valid_actions)}"
+
+            # Route to appropriate method with error handling
+            if action == "check_balance":
+                if not wallet_address:
+                    return "Error: wallet_address is required for check_balance action"
+                return self._check_balance(wallet_address, currency)
+            elif action == "validate_transaction_limits":
+                if amount <= 0:
+                    return "Error: amount must be greater than 0 for validate_transaction_limits action"
+                return self._validate_transaction_limits(amount, currency, user_id, transaction_type)
+            elif action == "check_minimum_balance":
+                if not wallet_address:
+                    return "Error: wallet_address is required for check_minimum_balance action"
+                return self._check_minimum_balance(wallet_address, currency)
+            elif action == "assess_risk":
+                if amount <= 0:
+                    return "Error: amount must be greater than 0 for assess_risk action"
+                return self._assess_risk(amount, currency, user_id, transaction_type)
+                
+        except Exception as e:
+            import traceback
+            error_details = traceback.format_exc()
+            print(f"Error in TreasuryRiskTools._run: {str(e)}\n{error_details}")
+            return f"Error in risk tool execution: {str(e)}"
 
     def _check_balance(self, wallet_address: str, currency: str = "USD") -> str:
         """Check real balance for a wallet address."""
@@ -351,4 +432,7 @@ class TreasuryRiskTools(BaseTool):
             return result
             
         except Exception as e:
+            import traceback
+            error_details = traceback.format_exc()
+            print(f"Error in risk assessment: {str(e)}\n{error_details}")
             return f"Error in risk assessment: {str(e)}" 

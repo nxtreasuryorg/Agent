@@ -175,9 +175,9 @@ class TreasuryAgent():
             ], # Only specialist agents - manager agent is specified separately
             tasks=self.tasks, # Automatically created by the @task decorator
             process=Process.hierarchical, # Using hierarchical process for Treasury Manager coordination
-            manager_agent=self.treasury_manager(), # Treasury Manager as the custom manager agent
             manager_llm=manager_llm, # Specify LLM instance for the manager in hierarchical process
             planning=False, # Disable planning to avoid LLM issues with Task Execution Planner
             verbose=True,
+            max_iterations=10,
             # Manager will coordinate specialist agents for payment processing (PROTOTYPE VERSION)
         )
