@@ -1,4 +1,50 @@
-# Risk Tools Integration - Complete ✅
+# Risk Tools Integration Summary
+
+## Recent Fix: Delegation Tool Errors (2025-01-04)
+
+### Problem
+The CrewAI "Delegate work to coworker" tool was failing with validation errors:
+```
+Arguments validation failed: 1 validation error for DelegateWorkToolSchema
+task
+  Input should be a valid string [type=string_type, input_value={'description': 'Please p...ype': 'risk_assessment'}, input_type=dict]
+```
+
+### Root Cause
+The delegation tool expects a string for the `task` parameter, but it was receiving a dictionary with `description` and `type` fields.
+
+### Solution Implemented
+1. **Updated task configuration** in `/treasury_agent/src/treasury_agent/config/tasks.yaml`:
+   - Modified `treasury_coordination_task` to use proper delegation format
+   - Assigned specific agents to `risk_assessment_task` and `payment_processing_task`
+   - Changed from complex task delegation to simple question-asking pattern
+
+2. **Proper delegation format**: Manager now asks simple string questions like:
+   - "Please assess the risk for this payment request and check if it maintains minimum balance and meets transaction limits."
+   - "Please analyze payment routing options and provide execution recommendations for this request."
+
+### Expected Input Format
+The API correctly expects this JSON structure from Step 1:
+```json
+{
+  "user_id": "string - User identifier",
+  "custody_wallet": "string - Custody wallet address",
+  "risk_config": {
+    "min_balance_usd": "number - Minimum balance in USD",
+    "transaction_limits": {
+      "single": "number - Single transaction limit",
+      "daily": "number - Daily transaction limit", 
+      "monthly": "number - Monthly transaction limit"
+    }
+  },
+  "user_notes": "string - Additional user instructions"
+}
+```
+
+### Status
+- ✅ Task configuration updated
+- ✅ Delegation format fixed
+- 🔄 Testing in progress
 
 ## 🎯 Mission Accomplished
 

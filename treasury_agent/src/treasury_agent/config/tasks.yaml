@@ -5,17 +5,22 @@ treasury_coordination_task:
   description: >
     Analyze request: {treasury_request}
     
-    Extract payment details and delegate to specialists:
-    1. Extract payment amount and recipient
-    2. Delegate risk assessment to Risk Assessor
-    3. Delegate payment analysis to Payment Specialist
+    You are the Treasury Manager coordinating specialist agents. Your role is to:
+    1. Extract payment details (amount, recipient, currency) from the request
+    2. Ask questions to specialists to gather their analysis
+    3. Coordinate the overall workflow
+    
+    IMPORTANT: When asking questions to coworkers, use simple string descriptions only.
+    For risk assessment, ask: "Please assess the risk for this payment request and check if it maintains minimum balance and meets transaction limits."
+    For payment analysis, ask: "Please analyze payment routing options and provide execution recommendations for this request."
     
   expected_output: >
-    Simple coordination plan with task delegation.
+    Simple coordination plan with specialist consultation results.
     
   task_completion_criteria: >
     - Request analyzed
-    - Tasks delegated
+    - Specialists consulted
+    - Results coordinated
     
   agent: treasury_manager
   output_file: output/treasury_report.md
@@ -24,20 +29,24 @@ payment_processing_task:
   description: >
     Analyze payment for: {treasury_request}
     
-    1. Choose payment method (USDT/USDC preferred)
-    2. Calculate costs
-    3. Create execution plan
-    4. Request user approval
+    You are the Payment Specialist. Use the Treasury USDT Payment Tool to:
+    1. Choose optimal payment method (USDT/USDC preferred)
+    2. Calculate transaction costs and gas fees
+    3. Create detailed execution plan
+    4. Prepare proposal for user approval
+    
+    Use the TreasuryUSDTPaymentTool with appropriate actions to analyze and prepare the payment.
     
   expected_output: >
-    Simple payment proposal with method, costs, and approval request.
+    Detailed payment proposal with method selection, cost analysis, and execution plan ready for approval.
     
   task_completion_criteria: >
-    - Payment method selected
-    - Costs calculated
-    - Approval requested
+    - Payment method analyzed and selected
+    - All costs calculated (including gas fees)
+    - Execution plan prepared
+    - User approval request ready
     
-  # No specific agent - let Treasury Manager delegate in hierarchical process
+  agent: payment_specialist
   context:
     - treasury_coordination_task
 
@@ -68,19 +77,24 @@ risk_assessment_task:
   description: >
     Assess risk for: {treasury_request}
     
-    1. Check if payment maintains minimum balance
-    2. Validate transaction limits
-    3. Provide APPROVE/REJECT decision
+    You are the Risk Assessor. Use the Treasury Risk Tools to:
+    1. Check if payment maintains minimum balance requirements
+    2. Validate transaction against configured limits
+    3. Assess overall risk level
+    4. Provide clear APPROVE/REJECT decision with reasoning
+    
+    Use the TreasuryRiskTools with action 'assess_risk' and provide all necessary parameters.
     
   expected_output: >
-    Simple risk assessment with approval decision.
+    Risk assessment report with clear approval/rejection decision and reasoning.
     
   task_completion_criteria: >
-    - Balance checked
-    - Risk assessed
-    - Decision provided
+    - Balance validation completed
+    - Transaction limits checked
+    - Risk level assessed
+    - Clear decision provided
     
-  # No specific agent - let Treasury Manager delegate in hierarchical process
+  agent: risk_assessor
   context:
     - treasury_coordination_task
 

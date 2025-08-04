@@ -4,7 +4,7 @@ import sys
 import os
 import json
 import tempfile
-from datetime import datetime
+from datetime import datetime, timedelta, timezone
 from pathlib import Path
 from typing import Dict, Any
 from flask import Flask, request, jsonify
@@ -523,7 +523,10 @@ def submit_approval():
 
 @app.route('/execution_result/<proposal_id>', methods=['GET'])
 def execution_result(proposal_id):
-    """Step 4: Return the execution/simulation result for the given proposal."""
+    """
+    Step 4: Return the execution/simulation result for the given proposal.
+    The result is cleaned up immediately after being sent to the client.
+    """
     print(f"📊 Retrieving execution result for: {proposal_id}")
     print(f"[DEBUG] Available execution results: {list(execution_results_store.keys())}")
     
@@ -546,7 +549,15 @@ def execution_result(proposal_id):
         }), 404
     
     print(f"✅ Returning execution result for {proposal_id}: {result.get('execution_status')}")
-    return jsonify(result)
+    
+    # Create response with the result
+    response = jsonify(result)
+    
+    # Clean up this specific execution result after sending the response
+    execution_results_store.pop(proposal_id, None)
+    print(f"🧹 Cleaned up execution result for: {proposal_id}")
+    
+    return response
 
 if __name__ == '__main__':
     print("🚀 Starting Flask server for Treasury Agent with USDT Payment Tools...")
