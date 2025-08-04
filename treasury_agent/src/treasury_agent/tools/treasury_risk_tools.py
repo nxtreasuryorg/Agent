@@ -116,11 +116,32 @@ class TreasuryRiskTools(BaseTool):
             print(f"Warning: Could not extract risk config from treasury request: {e}")
             return None
 
+    def _safe_float_conversion(self, value, param_name: str, default: float = 0.0) -> float:
+        """Safely convert input to float, handling strings and other types."""
+        try:
+            if value is None:
+                return default
+            if isinstance(value, (int, float)):
+                return float(value)
+            if isinstance(value, str):
+                # Handle empty string
+                if not value.strip():
+                    return default
+                return float(value.strip())
+            # Try to convert other types
+            return float(value)
+        except (ValueError, TypeError) as e:
+            print(f"Warning: Could not convert {param_name} '{value}' to float. Using default {default}. Error: {e}")
+            return default
+
     def _run(self, action: str, wallet_address: str = "", amount: float = 0.0, 
              currency: str = "USD", user_id: str = "default", transaction_type: str = "payment", 
              risk_config: Optional[Dict[str, Any]] = None, treasury_request: Optional[str] = None) -> str:
         
         try:
+            # CRITICAL FIX: Convert amount parameter to float to handle string inputs from JSON/web
+            amount = self._safe_float_conversion(amount, "amount", 0.0)
+            
             # Try to extract risk configuration from treasury_request if risk_config is not provided
             if not risk_config and treasury_request:
                 risk_config = self._extract_risk_config_from_request(treasury_request)
@@ -133,14 +154,23 @@ class TreasuryRiskTools(BaseTool):
             self._monthly_limit_usd = self._get_limit_param(risk_config, 'monthly', 200000.0)
             self._max_single_transaction_usd = self._get_limit_param(risk_config, 'single', 25000.0)
 
-            # Validate action parameter
+            # Validate action parameter and ensure it's a string
+            if not action or not isinstance(action, str):
+                return "Error: action parameter is required and must be a string"
+            
             valid_actions = ["check_balance", "validate_transaction_limits", "check_minimum_balance", "assess_risk"]
-            if not action or action not in valid_actions:
-                return f"Error: Invalid or missing action. Supported actions: {', '.join(valid_actions)}"
+            if action not in valid_actions:
+                return f"Error: Invalid action '{action}'. Supported actions: {', '.join(valid_actions)}"
+
+            # Ensure other parameters are proper types
+            wallet_address = str(wallet_address) if wallet_address is not None else ""
+            currency = str(currency) if currency is not None else "USD"
+            user_id = str(user_id) if user_id is not None else "default"
+            transaction_type = str(transaction_type) if transaction_type is not None else "payment"
 
             # Route to appropriate method with error handling
             if action == "check_balance":
-                if not wallet_address:
+                if not wallet_address.strip():
                     return "Error: wallet_address is required for check_balance action"
                 return self._check_balance(wallet_address, currency)
             elif action == "validate_transaction_limits":
@@ -148,7 +178,7 @@ class TreasuryRiskTools(BaseTool):
                     return "Error: amount must be greater than 0 for validate_transaction_limits action"
                 return self._validate_transaction_limits(amount, currency, user_id, transaction_type)
             elif action == "check_minimum_balance":
-                if not wallet_address:
+                if not wallet_address.strip():
                     return "Error: wallet_address is required for check_minimum_balance action"
                 return self._check_minimum_balance(wallet_address, currency)
             elif action == "assess_risk":
