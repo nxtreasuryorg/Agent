@@ -9,9 +9,9 @@ import os
 # from treasury_agent.tools.mock_risk_assessment import MockRiskAssessmentTool
 # from treasury_agent.tools.mock_payment_processor import MockPaymentProcessorTool
 # from treasury_agent.tools.mock_audit_logger import MockAuditLoggerTool
-from treasury_agent.tools.excel_analysis_tool import ExcelAnalysisTool
-from treasury_agent.tools.treasury_usdt_payment_tool import TreasuryUSDTPaymentTool
-from treasury_agent.tools.treasury_risk_tools import TreasuryRiskTools
+from .tools.excel_analysis_tool import ExcelAnalysisTool
+from .tools.treasury_usdt_payment_tool import TreasuryUSDTPaymentTool
+from .tools.treasury_risk_tools import TreasuryRiskTools
 
 # If you want to run a snippet of code before or after the crew starts,
 # you can use the @before_kickoff and @after_kickoff decorators
@@ -172,12 +172,11 @@ class TreasuryAgent():
                 self.payment_specialist(),
                 # self.market_analyst(), # COMMENTED OUT FOR PROTOTYPE - investment features
                 self.risk_assessor()
-            ], # Only specialist agents - manager agent is specified separately
+            ],  # Only specialist agents - manager is set separately in hierarchical process
             tasks=self.tasks, # Automatically created by the @task decorator
             process=Process.hierarchical, # Using hierarchical process for Treasury Manager coordination
-            manager_llm=manager_llm, # Specify LLM instance for the manager in hierarchical process
-            planning=False, # Disable planning to avoid LLM issues with Task Execution Planner
+            manager_agent=self.treasury_manager(),  # Manager agent specified separately
             verbose=True,
-            max_iterations=10,
+            max_iterations=1,
             # Manager will coordinate specialist agents for payment processing (PROTOTYPE VERSION)
         )

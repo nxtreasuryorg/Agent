@@ -22,7 +22,6 @@ treasury_coordination_task:
     - Specialists consulted
     - Results coordinated
     
-  agent: treasury_manager
   output_file: output/treasury_report.md
 
 payment_processing_task:
@@ -46,7 +45,6 @@ payment_processing_task:
     - Execution plan prepared
     - User approval request ready
     
-  agent: payment_specialist
   context:
     - treasury_coordination_task
 
@@ -94,7 +92,6 @@ risk_assessment_task:
     - Risk level assessed
     - Clear decision provided
     
-  agent: risk_assessor
   context:
     - treasury_coordination_task
 
@@ -114,7 +111,6 @@ final_treasury_report_task:
     - All results combined
     - Final recommendations made
     
-  agent: treasury_manager
   context:
     - treasury_coordination_task
     - payment_processing_task
