@@ -2,8 +2,7 @@
 # Basic Agent Dependencies
 
 # Core AI Agent Framework
-crewai>=0.30.11
-crewai[tools]
+crewai[tools]==0.157.0
 
 # AWS Bedrock Integration
 boto3>=1.34.0
@@ -28,4 +27,4 @@ requests>=2.25.0
 
 # Note: Additional dependencies will be added in later phases:
 # Phase 3: Investment tools (pandas, numpy, etc.)  
-# Phase 4: Production (gunicorn, prometheus-client, etc.) 
+# Phase 4: Production (gunicorn, prometheus-client, etc.)
