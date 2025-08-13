@@ -12,22 +12,38 @@ from flask_cors import CORS
 import uuid
 from werkzeug.utils import secure_filename
 from flask import send_file
+from dotenv import load_dotenv
 
 # Add treasury_agent src directory to Python path
 current_dir = Path(__file__).parent
 treasury_agent_src = current_dir / "treasury_agent" / "src"
 sys.path.insert(0, str(treasury_agent_src))
 
-# Load environment variables from treasury_agent/.env
-env_file = current_dir / "treasury_agent" / ".env"
-if env_file.exists():
-    with open(env_file, 'r') as f:
-        for line in f:
-            line = line.strip()
-            if line and not line.startswith('#') and '=' in line:
-                key, value = line.split('=', 1)
-                os.environ[key] = value
-    print(f"🔧 Loaded environment variables from {env_file}")
+# Bootstrap environment variables
+def _bootstrap_env():
+    """Prefer Render-provided env vars; otherwise load local .env."""
+    env_file = current_dir / "treasury_agent" / ".env"
+
+    # Detect Render by presence of its well-known env vars
+    is_render = any([
+        os.getenv("RENDER") is not None,
+        os.getenv("RENDER_SERVICE_ID"),
+        os.getenv("RENDER_EXTERNAL_URL"),
+    ])
+
+    if is_render:
+        print("🔧 Render environment detected — using variables from Render Dashboard.")
+        # Nothing to load; Render injects env at runtime
+        return
+
+    # Local/dev: load from .env if available (non-destructive by default)
+    if env_file.exists():
+        load_dotenv(dotenv_path=env_file, override=False)
+        print(f"🔧 Loaded environment variables from {env_file}")
+    else:
+        print(f"⚠️ No Render env detected and {env_file} not found. Proceeding with existing env.")
+
+_bootstrap_env()
 
 from treasury_agent.crew import TreasuryAgent
 
@@ -561,7 +577,8 @@ def execution_result(proposal_id):
 
 if __name__ == '__main__':
     print("🚀 Starting Flask server for Treasury Agent with USDT Payment Tools...")
-    print("📡 Server will be available at http://localhost:5001")
+    port = int(os.environ.get("PORT", 5001))
+    print(f"📡 Server will be available at http://localhost:{port}")
     print("🔗 Endpoints:")
     print("   GET  /health - Health check")
     print("   POST /process_request - Process treasury requests")
@@ -571,4 +588,4 @@ if __name__ == '__main__':
     print("   POST /submit_approval - Submit approval/partial approval")
     print("   GET  /execution_result/<id> - Get execution result by ID")
     
-    app.run(host='0.0.0.0', port=5001, debug=False, use_reloader=False) 
+    app.run(host='0.0.0.0', port=port, debug=False, use_reloader=False)
